@@ -98,6 +98,16 @@
             ],
             "scripts": []
           }
+        },
+        "deploy": {
+          "builder": "@angular/fire:deploy",
+          "options": {
+            "prerender": false,
+            "ssr": false,
+            "browserTarget": "game-reviews:build:production",
+            "firebaseProject": "gamereviews-8c508",
+            "firebaseHostingSite": "gamereviews-8c508"
+          }
         }
       }
     }

@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "gamereviews-8c508": {
+      "hosting": {
+        "game-reviews": [
+          "gamereviews-8c508"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "gamereviews-8c508"
+  }
+}
