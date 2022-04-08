@@ -10,28 +10,32 @@ import { provideDatabase,getDatabase } from '@angular/fire/database';
 import { CoreModule } from './core/core.module';
 import { SharedModule } from './shared/shared.module';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { GamesListComponent } from './feature/games-list/games-list.component';
-import { GamesListItemComponent } from './feature/games-list-item/games-list-item.component';
-import { GameComponent } from './feature/game/game.component';
+import { GamesModule } from './feature/games/games.module';
+import { MyAuthModule } from './auth/auth.module';
+import { HeaderComponent } from './core/header/header.component';
+import { FooterComponent } from './core/footer/footer.component';
 
 @NgModule({
   declarations: [
-    AppComponent,
-    GamesListComponent,
-    GamesListItemComponent,
-    GameComponent
+    AppComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     CoreModule,
     SharedModule,
+    MyAuthModule,
+    GamesModule,
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideAuth(() => getAuth()),
     provideDatabase(() => getDatabase()),
     NgbModule
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [
+    AppComponent,
+    HeaderComponent,
+    FooterComponent
+  ]
 })
 export class AppModule { }
