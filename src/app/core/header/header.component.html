@@ -1,3 +1,17 @@
 <header>
-    <p>header works!</p>
+    <div class="logo">
+        <nav class="navbar navbar-light">
+            <a class="navbar-brand" routerLink="/home">Gaming Reviews</a>
+          </nav>
+    </div>
+    <div class="navbar">
+        <ng-container *ngIf="!loggedIn()">
+            <button routerLink="/login" class="btn">Log in</button>
+            <button routerLink="/register" class="btn">Register</button>
+        </ng-container>
+        <ng-container *ngIf="loggedIn()">
+            <button routerLink="/profile" class="btn">Profile</button>
+            <button (click)="logout()" class="btn">Logout</button>
+        </ng-container>
+    </div>
 </header>

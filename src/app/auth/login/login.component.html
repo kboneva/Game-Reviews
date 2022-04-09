@@ -1,1 +1,26 @@
-<p>login works!</p>
+<div class="container">
+    <form class="login" [formGroup]="loginFormGroup" (ngSubmit)="login()">
+        <fieldset>
+
+            <div class="m-3">
+                <h2 >Log In</h2>
+                <h5>Don't have an account? <a routerLink="/register">Sign up</a></h5>
+            </div>
+
+            <div class="email">
+                <label for="email"></label>
+                <input formControlName="email" class="m-3" type="email" name="email" id="email" placeholder="example@email.com">
+            </div>
+
+            <div class="password">
+                <label for="email"></label>
+                <input formControlName="password" class="m-3" type="password" name="password" id="password" placeholder="**********">
+            </div>
+
+            <div class="button">
+                <button class="btn btn-success m-3">Log In</button>
+            </div>
+
+        </fieldset>
+    </form>
+</div>
