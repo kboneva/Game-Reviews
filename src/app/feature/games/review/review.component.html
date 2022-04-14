@@ -1,0 +1,13 @@
+<div class="card card-body">
+    <div class="wrapper">
+        <h5 class="card-title">Rating: <span [ngClass]="review.rating >= 5 ? 'positive' : 'negative'">{{review.rating}}</span></h5>
+        <ng-container *ngIf="!!user.username">
+            <p class="card-title">{{user.username}}</p>
+        </ng-container>
+        <ng-container *ngIf="!user.username">
+            <p class="card-title">Anonymous</p>
+        </ng-container>
+    </div>
+    <p class="card-title">{{review.text}}</p>
+    <p class="text-right text-muted">{{review.postedAt | date: "dd MMM YYYY"}}</p>
+</div>

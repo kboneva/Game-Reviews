@@ -6,6 +6,7 @@ import { UserService } from './services/user.service';
 import { RouterModule } from '@angular/router';
 import { AuthService } from './services/auth.service';
 import { GameService } from './services/game.service';
+import { ReviewService } from './services/review.service';
 
 
 
@@ -25,7 +26,8 @@ import { GameService } from './services/game.service';
   providers: [
     UserService,
     AuthService,
-    GameService
+    GameService,
+    ReviewService
     ]
 })
 export class CoreModule { }

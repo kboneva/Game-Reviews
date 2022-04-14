@@ -1,2 +1,7 @@
 <app-game [game]="game"></app-game>
-<!-- TODO reviews -->
+<ng-container *ngIf="!!game.reviews">
+    <app-review *ngFor="let review of game.reviews" [reviewId]="review"></app-review>
+</ng-container>
+<ng-container *ngIf="!game.reviews">
+    <p>This game has no reviews yet.</p>
+</ng-container>

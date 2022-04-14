@@ -1,9 +1,9 @@
-import { IBase } from "./base";
-import { IReview } from "./review";
-
-export interface IGame extends IBase {
+export interface IGame {
+    _id: string;
+    description: string;
+    title: string;
     developer: string;
     genre: string[];
     releaseDate: string;
-    reviews: IReview[];
+    reviews: string[];
 }

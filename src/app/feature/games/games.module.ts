@@ -6,6 +6,7 @@ import { GamesListItemComponent } from './games-list-item/games-list-item.compon
 import { AllGamesPageComponent } from './all-games-page/all-games-page.component';
 import { GamePageComponent } from './game-page/game-page.component';
 import { GamesRoutingModule } from './games-routing.module';
+import { ReviewComponent } from './review/review.component';
 
 
 
@@ -15,7 +16,8 @@ import { GamesRoutingModule } from './games-routing.module';
     GamesListComponent,
     GamesListItemComponent,
     AllGamesPageComponent,
-    GamePageComponent
+    GamePageComponent,
+    ReviewComponent
   ],
   imports: [
     CommonModule,

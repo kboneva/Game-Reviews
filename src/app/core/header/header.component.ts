@@ -11,7 +11,7 @@ export class HeaderComponent implements OnInit {
   constructor(private authService: AuthService) { }
 
   ngOnInit(): void {
-    console.log(this.loggedIn); // TODO header loads before Auth
+    // TODO header loads before Auth
   }
 
   get loggedIn(): boolean {
