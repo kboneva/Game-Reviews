@@ -1,17 +1,18 @@
 <header>
-    <div class="logo">
-        <nav class="navbar navbar-light">
+    <nav class="navbar navbar-light">
+        <div class="wrapper navbar-nav">
             <a class="navbar-brand" routerLink="/home">Gaming Reviews</a>
-          </nav>
-    </div>
-    <div class="navbar">
-        <ng-container *ngIf="!loggedIn()">
-            <button routerLink="/login" class="btn">Log in</button>
-            <button routerLink="/register" class="btn">Register</button>
-        </ng-container>
-        <ng-container *ngIf="loggedIn()">
-            <button routerLink="/profile" class="btn">Profile</button>
-            <button (click)="logout()" class="btn">Logout</button>
-        </ng-container>
-    </div>
+            <a class="nav-item nav-link active" routerLink="/catalog">Catalog</a>
+        </div>
+        <div class="wrapper navbar-nav">
+            <ng-container *ngIf="!loggedIn">
+                <a class="nav-item nav-link active" routerLink="/login">Log in</a>
+                <a class="nav-item nav-link active" routerLink="/register">Register</a>
+            </ng-container>
+            <ng-container *ngIf="loggedIn">
+                <a class="nav-item nav-link active" routerLink="/profile">Profile</a>
+                <a class="nav-item nav-link active" (click)="logout()">Logout</a>
+            </ng-container>
+        </div>
+    </nav>
 </header>

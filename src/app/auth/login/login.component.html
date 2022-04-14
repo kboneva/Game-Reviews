@@ -1,24 +1,35 @@
 <div class="container">
-    <form class="login" [formGroup]="loginFormGroup" (ngSubmit)="login()">
+    <form class="login" [formGroup]="loginForm" (ngSubmit)="login()">
         <fieldset>
 
             <div class="m-3">
-                <h2 >Log In</h2>
+                <h2>Log In</h2>
                 <h5>Don't have an account? <a routerLink="/register">Sign up</a></h5>
             </div>
 
             <div class="email">
                 <label for="email"></label>
-                <input formControlName="email" class="m-3" type="email" name="email" id="email" placeholder="example@email.com">
+                <input formControlName="email" class="form-control {{showError('email') ?  'is-invalid' : ''}}" type="email" name="email" id="email" placeholder="example@email.com">
+                <ng-container *ngIf="showError('email')">
+                    <p class="invalid-feedback" *ngIf="validation('email', 'required')">Email is required!</p>
+                    <p class="invalid-feedback" *ngIf="validation('email', 'email')">Invalid email!</p>
+                </ng-container>
             </div>
 
             <div class="password">
-                <label for="email"></label>
-                <input formControlName="password" class="m-3" type="password" name="password" id="password" placeholder="**********">
+                <label for="password"></label>
+                <input formControlName="password" class="form-control {{showError('password') ?  'is-invalid' : ''}}" type="password" name="password" id="password" placeholder="**********">
+                <ng-container *ngIf="showError('password')">
+                    <p class="invalid-feedback" *ngIf="validation('password', 'required')">Password is required!</p>
+                </ng-container>
+            </div>
+
+            <div class="errorMessage">
+                <p *ngIf="errorMessage" class="error">{{errorMessage}}</p>
             </div>
 
             <div class="button">
-                <button class="btn btn-success m-3">Log In</button>
+                <button class="btn btn-success m-3" [disabled]="this.loginForm.invalid">Log In</button>
             </div>
 
         </fieldset>

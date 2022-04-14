@@ -1,1 +1,17 @@
-<p>game works!</p>
+<div class="card-header wrapper">
+    <h2 class="card-title">{{game.title}}</h2>
+    <h5 class="card-title">{{game.developer}}</h5>
+</div>
+<div class="card-body">
+    <p class="card-text">{{game.description}}</p>
+    <div class="wrapper">
+        <div class="left-side">
+            <h6>Genres:</h6>
+            <p class="text-muted"><small>{{game.genre.join(", ")}}</small></p>
+        </div>
+        <div class="right-side">
+            <h6>Release Date:</h6>
+            <p class="text-muted"><small>{{game.releaseDate | date:'dd MMMM YYYY'}}</small></p>
+        </div>
+    </div>
+</div>

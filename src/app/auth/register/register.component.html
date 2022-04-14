@@ -1,1 +1,49 @@
-<p>register works!</p>
+<div class="container">
+    <form class="register" [formGroup]="registerForm" (ngSubmit)="register()">
+        <fieldset>
+
+            <div class="m-3">
+                <h2>Register</h2>
+                <h5>Already signed up? <a routerLink="/login">Sign in</a></h5>
+            </div>
+
+            <div class="username">
+                <label for="username"></label>
+                <input formControlName="username" class="form-control {{showError('username') ?  'is-invalid' : ''}}" type="text" name="username" id="username" placeholder="Your name">
+                <ng-container *ngIf="showError('username')">
+                    <p class="invalid-feedback" *ngIf="validation('username', 'required')">Username is required!</p>
+                </ng-container>
+            </div>
+
+            <div class="email">
+                <label for="email"></label>
+                <input formControlName="email" class="form-control {{showError('email') ?  'is-invalid' : ''}}" type="email" name="email" id="email" placeholder="example@email.com">
+                <ng-container *ngIf="showError('email')">
+                    <p class="invalid-feedback" *ngIf="validation('email', 'required')">Email is required!</p>
+                    <p class="invalid-feedback" *ngIf="validation('email', 'email')">Invalid email!</p>
+                </ng-container>
+            </div>
+
+            <div class="password">
+                <label for="password"></label>
+                <input formControlName="password" class="form-control {{showError('password') ?  'is-invalid' : ''}}" type="password" name="password" id="password" placeholder="**********">
+                <ng-container *ngIf="showError('password')">
+                    <p class="invalid-feedback" *ngIf="validation('password', 'required')">Password is required!</p>
+                </ng-container>
+            </div>
+            
+            <div class="repeatPassword">
+                <label for="repeatPassword"></label>
+                <input formControlName="repeatPassword" class="form-control {{showError('repeatPassword') ?  'is-invalid' : ''}}" type="password" name="repeatPassword" id="repeatPassword" placeholder="**********">
+                <ng-container *ngIf="showError('repeatPassword')">
+                    <p class="invalid-feedback" *ngIf="validation('repeatPassword', 'required')">Passwords don't match!</p>
+                </ng-container>
+            </div>
+
+            <div class="button">
+                <button class="btn btn-success m-3" [disabled]="this.registerForm.invalid">Log In</button>
+            </div>
+
+        </fieldset>
+    </form>
+</div>

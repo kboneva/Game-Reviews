@@ -1,1 +1,5 @@
-<p>games-list works!</p>
+<div>
+    <ng-container *ngIf="!!gamesList">
+        <app-games-list-item *ngFor="let game of gamesList" [game]="game" class="m-1"></app-games-list-item>
+    </ng-container>
+</div>

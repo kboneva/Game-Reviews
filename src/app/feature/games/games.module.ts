@@ -3,6 +3,9 @@ import { CommonModule } from '@angular/common';
 import { GameComponent } from './game/game.component';
 import { GamesListComponent } from './games-list/games-list.component';
 import { GamesListItemComponent } from './games-list-item/games-list-item.component';
+import { AllGamesPageComponent } from './all-games-page/all-games-page.component';
+import { GamePageComponent } from './game-page/game-page.component';
+import { GamesRoutingModule } from './games-routing.module';
 
 
 
@@ -10,10 +13,13 @@ import { GamesListItemComponent } from './games-list-item/games-list-item.compon
   declarations: [
     GameComponent,
     GamesListComponent,
-    GamesListItemComponent
+    GamesListItemComponent,
+    AllGamesPageComponent,
+    GamePageComponent
   ],
   imports: [
-    CommonModule
+    CommonModule,
+    GamesRoutingModule
   ]
 })
 
