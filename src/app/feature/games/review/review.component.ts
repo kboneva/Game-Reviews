@@ -22,13 +22,10 @@ export class ReviewComponent implements OnInit {
     {
       this.reviewService.loadReviewById(this.reviewId).subscribe(review => {
         this.review = review;
-        console.log(this.review);
         this.userService.loadUser(this.review.userId).subscribe(user => {
           this.user = user;
-          console.log(this.user);
           this.gameService.loadGameById(this.review.gameId).subscribe(game => {
             this.game = game;
-            console.log(this.game);
           })
         })
       });

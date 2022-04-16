@@ -1,7 +1,17 @@
-<app-game [game]="game"></app-game>
-<ng-container *ngIf="!!game.reviews">
-    <app-review *ngFor="let review of game.reviews" [reviewId]="review"></app-review>
+<ng-container *ngIf="!!game else loading">
+    <app-game [game]="game"></app-game>
+    <ng-container *ngIf="!!game.reviews">
+        <app-review *ngFor="let review of game.reviews" [reviewId]="review"></app-review>
+    </ng-container>
+    <ng-container *ngIf="!game.reviews">
+        <p>This game has no reviews yet.</p>
+    </ng-container>
+    <ng-container *ngIf="loggedIn">
+        <button [ngClass]="addReviewShow ? 'btn btn-danger' : 'btn btn-primary'" (click)="addReviewToggle()">{{addReviewShow ? "Cancel" : "Add review"}}</button>
+        <app-add-review [ngClass]="addReviewShow ? '' : 'd-none'" [gameId]="gameId"></app-add-review>
+    </ng-container>
 </ng-container>
-<ng-container *ngIf="!game.reviews">
-    <p>This game has no reviews yet.</p>
-</ng-container>
+
+<ng-template #loading>
+    <p>Loading...</p>
+</ng-template>

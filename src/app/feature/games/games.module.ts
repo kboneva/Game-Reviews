@@ -7,6 +7,9 @@ import { AllGamesPageComponent } from './all-games-page/all-games-page.component
 import { GamePageComponent } from './game-page/game-page.component';
 import { GamesRoutingModule } from './games-routing.module';
 import { ReviewComponent } from './review/review.component';
+import { AddReviewComponent } from './add-review/add-review.component';
+import { ReactiveFormsModule } from '@angular/forms';
+import { NgbRatingModule } from '@ng-bootstrap/ng-bootstrap';
 
 
 
@@ -17,11 +20,13 @@ import { ReviewComponent } from './review/review.component';
     GamesListItemComponent,
     AllGamesPageComponent,
     GamePageComponent,
-    ReviewComponent
+    ReviewComponent,
+    AddReviewComponent
   ],
   imports: [
     CommonModule,
-    GamesRoutingModule
+    GamesRoutingModule,
+    ReactiveFormsModule,NgbRatingModule
   ]
 })
 

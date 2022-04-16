@@ -10,16 +10,27 @@ import { GameService } from 'src/app/core/services/game.service';
 })
 export class GamePageComponent implements OnInit {
 
+  gameId!: string;
   game!: IGame;
+  addReviewShow: boolean = false;
+
+  get loggedIn() {
+    return true; // TODO auth
+  }
 
   constructor(private activatedRoute: ActivatedRoute, private gameService: GameService) { }
 
   ngOnInit(): void {
     this.activatedRoute.params.subscribe(params => {
-      const gameId = params['uid'];
-      this.gameService.loadGameById(gameId).subscribe(game => {
+      this.gameId = params['uid'];
+      this.gameService.loadGameById(this.gameId).subscribe(game => {
         this.game = game;
+        this.game.reviews = Object.keys(game.reviews);
       })
     })
+  }
+
+  addReviewToggle(): void {
+    this.addReviewShow = !this.addReviewShow;
   }
 }
