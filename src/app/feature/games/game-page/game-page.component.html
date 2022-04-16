@@ -6,7 +6,7 @@
     <ng-container *ngIf="!game.reviews">
         <p>This game has no reviews yet.</p>
     </ng-container>
-    <ng-container *ngIf="loggedIn">
+    <ng-container *ngIf="(isLogged$ | async)">
         <button [ngClass]="addReviewShow ? 'btn btn-danger' : 'btn btn-primary'" (click)="addReviewToggle()">{{addReviewShow ? "Cancel" : "Add review"}}</button>
         <app-add-review [ngClass]="addReviewShow ? '' : 'd-none'" [gameId]="gameId"></app-add-review>
     </ng-container>

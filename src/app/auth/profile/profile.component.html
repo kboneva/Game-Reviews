@@ -1,4 +1,9 @@
 <div class="container">
-    <h2>{{currentUser.displayName}}</h2>
-    <h3>{{currentUser.email}}</h3>
+    <ng-container *ngIf="!!currentUser else loading">
+        <h2>{{currentUser.username}}</h2>
+    </ng-container>
 </div>
+
+<ng-template #loading>
+    <p>Loading...</p>
+</ng-template>

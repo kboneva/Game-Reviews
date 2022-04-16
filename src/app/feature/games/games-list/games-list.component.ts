@@ -10,7 +10,6 @@ import { GameService } from 'src/app/core/services/game.service';
 export class GamesListComponent implements OnInit {
 
   gamesList!: IGame[];
-  lenToShow: number = 300;
 
   constructor(private gameServices: GameService) { }
 
@@ -23,7 +22,7 @@ export class GamesListComponent implements OnInit {
         items[i] = {
           _id: keys[i],
           developer:values[i].developer,
-          description: values[i].description.length >= 250 ? values[i].description.substring(0, this.lenToShow) + "..." : values[i].description,
+          description: values[i].description,
           releaseDate: values[i].releaseDate,
           genre: values[i].genre, 
           reviews: values[i].reviews, 

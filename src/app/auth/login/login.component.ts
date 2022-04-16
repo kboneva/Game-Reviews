@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { AuthService } from 'src/app/core/services/auth.service';
+import { AuthService } from 'src/app/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -23,12 +23,7 @@ export class LoginComponent implements OnInit {
 
   login(): void {
     this.errorMessage = '';
-    const result = this.authService.login$(this.loginForm.value)
-    // console.log(result); 
-    // if (!!result) {
-    // this.errorMessage = result;
-    // }
-    // TODO error handling
+    this.authService.login(this.loginForm.value)
   }
 
   showError(property: string): boolean {

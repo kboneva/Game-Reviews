@@ -20,9 +20,9 @@ export class ReviewComponent implements OnInit {
 
   ngOnInit(): void {
     {
-      this.reviewService.loadReviewById(this.reviewId).subscribe(review => {
+      this.reviewService.loadReviewById$(this.reviewId).subscribe(review => {
         this.review = review;
-        this.userService.loadUser(this.review.userId).subscribe(user => {
+        this.userService.loadUser$(this.review.userId).subscribe(user => {
           this.user = user;
           this.gameService.loadGameById(this.review.gameId).subscribe(game => {
             this.game = game;

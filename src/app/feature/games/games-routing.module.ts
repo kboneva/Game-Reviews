@@ -8,7 +8,7 @@ const routes: Routes = [
       component: AllGamesPageComponent
   },
   {
-      path: 'game/:uid',
+      path: ':uid',
       component: GamePageComponent
   }
 ];

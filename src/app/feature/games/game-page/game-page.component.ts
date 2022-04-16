@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { IGame } from 'src/app/core/interfaces';
+import { AuthService } from 'src/app/auth.service';
 import { GameService } from 'src/app/core/services/game.service';
 
 @Component({
@@ -14,11 +15,9 @@ export class GamePageComponent implements OnInit {
   game!: IGame;
   addReviewShow: boolean = false;
 
-  get loggedIn() {
-    return true; // TODO auth
-  }
+  isLogged$ = this.authService.isLogged$
 
-  constructor(private activatedRoute: ActivatedRoute, private gameService: GameService) { }
+  constructor(private activatedRoute: ActivatedRoute, private gameService: GameService, private authService: AuthService) { }
 
   ngOnInit(): void {
     this.activatedRoute.params.subscribe(params => {

@@ -24,7 +24,7 @@ export class AddReviewComponent implements OnInit {
   }
 
   submit(): void {
-    this.reviewService.submitReview$(this.reviewForm.value, this.gameId)
+    this.reviewService.submitReview$(this.reviewForm.value, this.gameId);
   }
 
   showError(property: string): boolean {

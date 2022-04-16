@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { User } from '@angular/fire/auth';
-import { AuthService } from 'src/app/core/services/auth.service';
+import { AuthService } from 'src/app/auth.service';
+import { IUser } from 'src/app/core/interfaces';
+import { UserService } from 'src/app/core/services/user.service';
 
 @Component({
   selector: 'app-profile',
@@ -9,15 +10,24 @@ import { AuthService } from 'src/app/core/services/auth.service';
 })
 export class ProfileComponent implements OnInit {
 
-  constructor(private authService: AuthService) { }
+  constructor(private authService: AuthService, private userService: UserService) { }
 
-  @Input() currentUser!: User;
+  currentUser!: IUser;
 
   ngOnInit(): void {
-    if (this.authService.currentUser !== null)
-    {
-      this.currentUser = this.authService.currentUser;
-    }
+    this.authService.currentId$.subscribe(id => {
+      console.log(id);
+      const currentUserId = id;
+      if (!!currentUserId) {
+        this.userService.loadUser$(currentUserId).subscribe(user => {
+        this.currentUser = user;
+        });
+      }
+    })
+      
+      
+
+    // TODO edit profile: change username and pfp, change email and password(?), 
   }
 
 }

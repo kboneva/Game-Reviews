@@ -13,6 +13,16 @@ const routes: Routes = [
     component: HomePageComponent
   },
   {
+    path: 'user',
+    loadChildren: () => import('./auth/auth.module')
+    .then(m => m.MyAuthModule)
+  },
+  {
+    path: 'games',
+    loadChildren: () => import('./feature/games/games.module')
+    .then(m => m.GamesModule)
+  },
+  {
     path: '**',
     component: ErrorPageComponent
   }

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthService } from '../services/auth.service';
+import { AuthService } from 'src/app/auth.service';
 
 @Component({
   selector: 'app-header',
@@ -10,15 +10,15 @@ export class HeaderComponent implements OnInit {
 
   constructor(private authService: AuthService) { }
 
+  currentUser$ = this.authService.currentUser$;
+  isLogged$ = this.authService.isLogged$;
+
   ngOnInit(): void {
     // TODO header loads before Auth
   }
 
-  get loggedIn(): boolean {
-    return this.authService.isLogged;
-  }
-
   logout(): void {
-    this.authService.logout();
+    if (this.isLogged$)
+      this.authService.logout();
   }
 }
