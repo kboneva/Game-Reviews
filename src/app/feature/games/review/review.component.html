@@ -14,7 +14,10 @@
         <ng-container *ngIf="!!review.text">
             <p class="card-title">{{review.text}}</p>
         </ng-container>
-        <p class="text-right text-muted">{{review.postedAt | date: "dd MMM YYYY"}}</p>
+        <div class="wrapper">
+            <button class="btn btn-danger" *ngIf="canDelete" (click)="remove()">Delete</button>
+            <p class="text-right text-muted">{{review.postedAt | date: "dd MMM YYYY"}}</p>
+        </div>
     </div>
 </ng-container>
 

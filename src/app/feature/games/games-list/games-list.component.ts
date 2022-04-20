@@ -14,7 +14,7 @@ export class GamesListComponent implements OnInit {
   constructor(private gameServices: GameService) { }
 
   ngOnInit(): void {
-    this.gameServices.loadGames().subscribe(gamesList => {
+    this.gameServices.loadGames$().subscribe(gamesList => {
       const keys = Object.keys(gamesList);
       const values = Object.values(gamesList);
       const items = [];

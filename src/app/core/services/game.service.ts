@@ -9,11 +9,11 @@ export class GameService {
 
   constructor(private http: HttpClient) { }
 
-  loadGames(): Observable<IGame[]> {
+  loadGames$(): Observable<IGame[]> {
     return this.http.get<IGame[]>(`${environment.firebase.databaseURL}/games.json`);
   }
 
-  loadGameById(_id: string): Observable<IGame> {
+  loadGameById$(_id: string): Observable<IGame> {
     return this.http.get<IGame>(`${environment.firebase.databaseURL}/games/${_id}.json`);
   }
 }

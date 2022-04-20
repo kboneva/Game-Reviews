@@ -26,7 +26,8 @@ import { NgbRatingModule } from '@ng-bootstrap/ng-bootstrap';
   imports: [
     CommonModule,
     GamesRoutingModule,
-    ReactiveFormsModule,NgbRatingModule
+    ReactiveFormsModule,
+    NgbRatingModule
   ]
 })
 

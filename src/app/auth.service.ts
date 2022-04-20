@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
-import { getAuth, onAuthStateChanged, user } from '@angular/fire/auth'
-import { Auth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, updateProfile, User } from '@angular/fire/auth';
-import { getDatabase, ref, set } from '@angular/fire/database';
+import { Auth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, updateProfile, AuthErrorCodes } from '@angular/fire/auth';
+import { Database, ref, set } from '@angular/fire/database';
 import { Router } from '@angular/router';
 import { BehaviorSubject, map } from 'rxjs';
 import { IUser } from './core/interfaces';
@@ -15,16 +14,15 @@ export class AuthService {
   private _currentUser = new BehaviorSubject<IUser>(undefined!);
 
   currentUser$ = this._currentUser.asObservable();
-  currentId$ = this._currentUser.pipe(map(user => user._id))
+  currentId$ = this.currentUser$.pipe(map(user => user._id));
   isLogged$ = this.currentUser$.pipe(map(user => !!user));
 
-  constructor(private auth: Auth, private router: Router, private userService: UserService) { 
+  constructor(private auth: Auth, private router: Router, private userService: UserService, private db: Database) { 
     this.authStateListener();
   }
 
   authStateListener() {
-    const auth = getAuth();
-    onAuthStateChanged(auth, (user) => {
+    this.auth.onAuthStateChanged(user => {
       if (user) {
         this.userService.loadUser$(user.uid).subscribe(currentUser => {
           this._currentUser.next(currentUser);
@@ -35,6 +33,7 @@ export class AuthService {
       }
     });
   }
+
   // TODO not authenticated until refresh?
   register(userData: {username: string, email: string, password: string, repeatPassword: string}): void {
     // TODO validate
@@ -42,8 +41,7 @@ export class AuthService {
     .then(userCredential => {
       const user = userCredential.user;
       updateProfile(user, {displayName: userData.username}); // TODO pfp
-      const db = getDatabase();
-      set(ref(db, 'users/' + user.uid), {
+      set(ref(this.db, 'users/' + user.uid), {
         _id: user.uid,
         username: userData.username,
         reviews: []
@@ -51,10 +49,15 @@ export class AuthService {
       .catch(error => {
         console.log(error);
       })
+    })
+    .then(() => {
+      this.authStateListener();
+    })
+    .then(() => {
       this.router.navigate(["/home"]);
     })
     .catch(error => {
-      if (error.code == "auth/email-already-in-use"){
+      if (error.code == AuthErrorCodes.EMAIL_EXISTS){
         console.log("Email already in use!"); // TODO error pop-ups
       }
       else console.log("Something went wrong.")
@@ -66,10 +69,13 @@ export class AuthService {
     
     signInWithEmailAndPassword(this.auth, userData.email, userData.password)
     .then(() => {
+      this.authStateListener();
+    })
+    .then(() => {
       this.router.navigate(["/home"]);
     })
     .catch((error) => {
-      if(error.code == "auth/user-not-found"){
+      if(error.code == AuthErrorCodes.USER_DELETED){
         console.log("No such user found!"); // TODO error pop-ups
       }
       else console.log("Something went wrong.")
@@ -78,6 +84,9 @@ export class AuthService {
 
   logout(): void {
     signOut(this.auth)
+    .then(() => {
+      this.authStateListener();
+    })
     .then(() => {
       this.router.navigate(["/user/login"]);
     });

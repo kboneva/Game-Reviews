@@ -16,7 +16,6 @@ export class ProfileComponent implements OnInit {
 
   ngOnInit(): void {
     this.authService.currentId$.subscribe(id => {
-      console.log(id);
       const currentUserId = id;
       if (!!currentUserId) {
         this.userService.loadUser$(currentUserId).subscribe(user => {

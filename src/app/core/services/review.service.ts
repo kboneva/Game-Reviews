@@ -1,50 +1,45 @@
 import { formatDate } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { child, get, getDatabase, push, ref, runTransaction, update } from '@angular/fire/database';
-import { Router } from '@angular/router';
-import { Observable } from 'rxjs';
+import { child, Database, push, ref, remove, update } from '@angular/fire/database';
+import { Observable, of } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { IReview } from '../interfaces';
-import { AuthService } from 'src/app/auth.service';
 
 @Injectable()
 export class ReviewService {
 
-  constructor(private http: HttpClient, private router: Router, private authService: AuthService) { }
-
-  loadReviewsByGameId$(_id: string): Observable<IReview[]> {
-    return this.http.get<IReview[]>(`${environment.firebase.databaseURL}/reviews.json`, { params: {
-      gameId:_id
-    }});
-  }
+  constructor(private http: HttpClient, private db: Database) { }
 
   loadReviewById$(_id: string): Observable<IReview> {
     return this.http.get<IReview>(`${environment.firebase.databaseURL}/reviews/${_id}.json`);
   }
 
-  submitReview$(reviewData: {rating: number, text: string}, gameId: string): void {
+  async submitReview$(reviewData: {rating: number, text: string}, gameId: string, userId: string): Promise<void> {
     const review = {
       rating: reviewData.rating,
       text: reviewData.text,
-      userId: this.authService.currentId$,
+      userId: userId,
       gameId: gameId,
       postedAt: formatDate(Date.now(), 'YYYY-MM-dd', 'en')
     }
 
-    const db = getDatabase();
-
-    const reviewId = push(child(ref(db), 'reviews')).key;
+    const reviewId = push(child(ref(this.db), 'reviews')).key;
 
     const updates: any = {};
     updates[`/reviews/${reviewId}`] = review;
-    updates[`/users/${this.authService.currentId$}/reviews/${reviewId}`] = true;
+    updates[`/users/${userId}/reviews/${reviewId}`] = true;
     updates[`/games/${gameId}/reviews/${reviewId}`] = true;
 
-    update(ref(db), updates)
+    await update(ref(this.db), updates).then(result => {})
     .catch(error => {
       console.log(error);
-    });
-    this.router.navigate(["/games/" + gameId]);
+    })
+  }
+
+  async deleteReview$(reviewId: string, userId: string, gameId: string): Promise<void> {
+    await remove(ref(this.db, 'reviews/' + reviewId));
+    await remove(ref(this.db, 'users/' + userId + '/reviews/' + reviewId));
+    await remove(ref(this.db, 'games/' + gameId + '/reviews/' + reviewId));
   }
 }

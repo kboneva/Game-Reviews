@@ -1,6 +1,7 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ReviewService } from 'src/app/core/services/review.service';
+import { Router } from '@angular/router';
+import { AuthService } from 'src/app/auth.service';
 
 @Component({
   selector: 'app-add-review',
@@ -10,21 +11,25 @@ import { ReviewService } from 'src/app/core/services/review.service';
 export class AddReviewComponent implements OnInit {
 
   @Input() gameId!: string;
+  userId!: string;
   errorMessage: string = '';
   rating = 5;
+  @Output() addItem: EventEmitter<any> = new EventEmitter();
 
   reviewForm: FormGroup = this.formBuilder.group({
     "rating": [5, { validators: [Validators.required, Validators.max(10)], updateOn: 'change'}],
     "text": [null, { validators: [Validators.maxLength(500)], updateOn: 'change'}]
   })
 
-  constructor(private formBuilder: FormBuilder, private reviewService: ReviewService) { }
+  constructor(private formBuilder: FormBuilder, private authService: AuthService, private router: Router) { }
 
   ngOnInit(): void {
+    this.authService.currentId$.subscribe(id => this.userId = id);
   }
 
   submit(): void {
-    this.reviewService.submitReview$(this.reviewForm.value, this.gameId);
+    const data = {rating: this.reviewForm.value.rating, text: this.reviewForm.value.text, gameId: this.gameId, userId: this.userId}
+    this.addItem.emit(data);
   }
 
   showError(property: string): boolean {

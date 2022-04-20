@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { IGame } from 'src/app/core/interfaces';
 import { AuthService } from 'src/app/auth.service';
 import { GameService } from 'src/app/core/services/game.service';
+import { ReviewService } from 'src/app/core/services/review.service';
 
 @Component({
   selector: 'app-game-page',
@@ -17,15 +18,32 @@ export class GamePageComponent implements OnInit {
 
   isLogged$ = this.authService.isLogged$
 
-  constructor(private activatedRoute: ActivatedRoute, private gameService: GameService, private authService: AuthService) { }
+  constructor(private activatedRoute: ActivatedRoute, private gameService: GameService, private authService: AuthService, private reviewService: ReviewService, private router: Router) { }
 
   ngOnInit(): void {
     this.activatedRoute.params.subscribe(params => {
       this.gameId = params['uid'];
-      this.gameService.loadGameById(this.gameId).subscribe(game => {
+      this.gameService.loadGameById$(this.gameId).subscribe(game => {
         this.game = game;
-        this.game.reviews = Object.keys(game.reviews);
+        if (!!game.reviews){
+          this.game.reviews = Object.keys(game.reviews);
+        }
       })
+    })
+  }
+
+  submitReview(data: {rating: number, text: string, gameId: string, userId: string}): void {
+    const formData = {rating: data.rating, text: data.text};
+    this.reviewService.submitReview$(formData, data.gameId, data.userId)
+    .then(() => {
+      this.ngOnInit();
+    });
+  }
+
+  deleteReview(data: {reviewId: string, userId: string, gameId: string}): void {
+    this.reviewService.deleteReview$(data.reviewId, data.userId, data.gameId)
+    .then(() => {
+      this.ngOnInit();
     })
   }
 
