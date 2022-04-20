@@ -1,5 +1,4 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { Router } from '@angular/router';
 import { AuthService } from 'src/app/auth.service';
 import { IGame, IReview, IUser } from 'src/app/core/interfaces';
 import { GameService } from 'src/app/core/services/game.service';
@@ -17,29 +16,46 @@ export class ReviewComponent implements OnInit {
   review!: IReview;
   user!: IUser;
   game!: IGame;
-  canDelete!: boolean;
+  canInteract!: boolean;
   @Output() removeItem: EventEmitter<any> = new EventEmitter();
+  editing: boolean = false;
   
 
-  constructor(private reviewService: ReviewService, private userService: UserService, private gameService: GameService, private router: Router, private authService: AuthService) { }
+  constructor(private reviewService: ReviewService, private userService: UserService, private gameService: GameService, private authService: AuthService) { }
 
   ngOnInit(): void {
     {
       this.reviewService.loadReviewById$(this.reviewId).subscribe(review => {
         this.review = review;
+        this.review._id = this.reviewId;
         this.userService.loadUser$(this.review.userId).subscribe(user => {
           this.user = user;
           this.gameService.loadGameById$(this.review.gameId).subscribe(game => {
             this.game = game;
-            this.authService.currentId$.subscribe(id => {
-              if (id == this.user._id) {
-                this.canDelete = true;
+            this.authService.currentUser$.subscribe(user => {
+              if (!!user && user._id == this.user._id) {
+                this.canInteract = true;
               }
             })
           })
         })
       });
     }
+  }
+  
+  toggleEditMode() {
+    console.log("show add-review and pass old data to it");
+    this.editing = !this.editing; // TODO make cancel button inside review component OR add the add-review component inside review component as a template.
+  }
+
+  updateReview(data: {reviewId: string, rating: number, text: string}){
+    const formData = {rating: data.rating, text: data.text};
+    console.log("pass to review service then ngInit");
+    this.reviewService.updateReview$(data.reviewId, formData)
+    .then(() => {
+      this.editing = false;
+      this.ngOnInit();
+    });
   }
 
   remove(): void {

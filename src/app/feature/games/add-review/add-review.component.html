@@ -1,5 +1,5 @@
-<div class="container">
-    <form class="add-review" [formGroup]="reviewForm" (ngSubmit)="submit()">
+<div class="card card-body">
+    <form class="add-review" [formGroup]="reviewForm" (ngSubmit)="editing ? update() : submit()">
         <fieldset>
             
             <div class="rating">
@@ -13,7 +13,7 @@
 
             <div class="text">
                 <label for="text"></label>
-                <textarea formControlName="text" class="form-control {{showError('text') ?  'is-invalid' : ''}}" name="text" id="text" placeholder="Your critique here."></textarea>
+                <textarea formControlName="text" class="form-control {{showError('text') ?  'is-invalid' : ''}}" name="text" id="text" placeholder="Your critique here.">{{text}}</textarea>
                 <ng-container *ngIf="showError('text')">
                     <p class="invalid-feedback" *ngIf="validation('text', 'maxLength')">Field is past the max length treshold!</p>
                 </ng-container>
@@ -24,7 +24,7 @@
             </div>
 
             <div class="button">
-                <button class="btn btn-primary m-3" [disabled]="this.reviewForm.invalid">Submit</button>
+                <button class="btn btn-primary m-3" [disabled]="this.reviewForm.invalid">{{editing ? "Update": "Submit"}}</button>
             </div>
 
         </fieldset>

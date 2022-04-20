@@ -14,7 +14,6 @@ export class HeaderComponent implements OnInit {
   isLogged$ = this.authService.isLogged$;
 
   ngOnInit(): void {
-    // TODO header loads before Auth
   }
 
   logout(): void {

@@ -34,7 +34,6 @@ export class AuthService {
     });
   }
 
-  // TODO not authenticated until refresh?
   register(userData: {username: string, email: string, password: string, repeatPassword: string}): void {
     // TODO validate
     createUserWithEmailAndPassword(this.auth, userData.email, userData.password)
@@ -64,6 +63,7 @@ export class AuthService {
     })
   }
 
+
   login(userData: {email: string, password: string}): void {
     // TODO validate
     
@@ -81,6 +81,7 @@ export class AuthService {
       else console.log("Something went wrong.")
     });
   }
+
 
   logout(): void {
     signOut(this.auth)

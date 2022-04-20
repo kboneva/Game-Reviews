@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { IGame } from 'src/app/core/interfaces';
 import { AuthService } from 'src/app/auth.service';
 import { GameService } from 'src/app/core/services/game.service';
@@ -15,10 +15,11 @@ export class GamePageComponent implements OnInit {
   gameId!: string;
   game!: IGame;
   addReviewShow: boolean = false;
+  inEditMode: boolean = false;
 
   isLogged$ = this.authService.isLogged$
 
-  constructor(private activatedRoute: ActivatedRoute, private gameService: GameService, private authService: AuthService, private reviewService: ReviewService, private router: Router) { }
+  constructor(private activatedRoute: ActivatedRoute, private gameService: GameService, private authService: AuthService, private reviewService: ReviewService) { }
 
   ngOnInit(): void {
     this.activatedRoute.params.subscribe(params => {

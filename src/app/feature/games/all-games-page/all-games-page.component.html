@@ -1,1 +1,9 @@
-<app-games-list></app-games-list>
+<div>
+    <ng-container *ngIf="!!gamesList else loading">
+        <app-games-list-item *ngFor="let game of gamesList" [game]="game" class="m-1"></app-games-list-item>
+    </ng-container>
+</div>
+
+<ng-template #loading>
+    <p>Loading...</p>
+</ng-template>

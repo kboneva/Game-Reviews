@@ -2,7 +2,7 @@ import { formatDate } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { child, Database, push, ref, remove, update } from '@angular/fire/database';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { IReview } from '../interfaces';
 
@@ -31,15 +31,33 @@ export class ReviewService {
     updates[`/users/${userId}/reviews/${reviewId}`] = true;
     updates[`/games/${gameId}/reviews/${reviewId}`] = true;
 
-    await update(ref(this.db), updates).then(result => {})
+    await update(ref(this.db), updates)
     .catch(error => {
       console.log(error);
     })
   }
 
   async deleteReview$(reviewId: string, userId: string, gameId: string): Promise<void> {
-    await remove(ref(this.db, 'reviews/' + reviewId));
-    await remove(ref(this.db, 'users/' + userId + '/reviews/' + reviewId));
-    await remove(ref(this.db, 'games/' + gameId + '/reviews/' + reviewId));
+    const updates: any = {};
+    updates[`/reviews/${reviewId}`] = null;
+    updates[`/users/${userId}/reviews/${reviewId}`] = null;
+    updates[`/games/${gameId}/reviews/${reviewId}`] = null;
+
+    await update(ref(this.db), updates)
+    .catch(error => {
+      console.log(error);
+    })
+  }
+
+  async updateReview$(reviewId: string, formData: {rating: number, text: string}): Promise<void> {
+    const data = {
+      rating: formData.rating,
+      text: formData.text
+    }
+
+    await update(ref(this.db, 'reviews/' + reviewId), data)
+    .catch(error => {
+      console.log(error);
+    });
   }
 }
