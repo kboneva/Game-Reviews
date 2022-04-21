@@ -1,9 +1,19 @@
 <div class="container">
     <ng-container *ngIf="!!currentUser else loading">
+        <img src='{{currentUser.avatar}}' class="avatar" alt="avatar">
         <h2>{{currentUser.username}}</h2>
+
+        <ng-container *ngIf="!!currentUser.reviews else noReviews">
+            <app-review *ngFor="let review of currentUser.reviews" [reviewId]="review" [displayGame]="true"></app-review>
+        </ng-container>
     </ng-container>
+    
 </div>
 
 <ng-template #loading>
     <p>Loading...</p>
+</ng-template>
+
+<ng-template #noReviews>
+    <p>This user has not submitted any reviews yet.</p>
 </ng-template>

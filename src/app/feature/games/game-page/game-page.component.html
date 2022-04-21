@@ -7,7 +7,7 @@
     
     <ng-container *ngIf="(isLogged$ | async)">
         <button [ngClass]="addReviewShow ? 'btn btn-danger' : 'btn btn-primary'" (click)="addReviewToggle()">{{addReviewShow ? "Cancel" : "Add review"}}</button>
-        <app-add-review (addItem)="submitReview($event)" [ngClass]="addReviewShow ? '' : 'd-none'" [gameId]="gameId"></app-add-review>
+        <app-add-review (addItem)="submitReview($event)" [ngClass]="addReviewShow ? '' : 'd-none'"></app-add-review>
     </ng-container>
 </ng-container>
 

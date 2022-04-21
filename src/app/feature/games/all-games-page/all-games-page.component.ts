@@ -26,7 +26,8 @@ export class AllGamesPageComponent implements OnInit {
           releaseDate: values[i].releaseDate,
           genre: values[i].genre, 
           reviews: values[i].reviews, 
-          title: values[i].title
+          title: values[i].title,
+          average: values[i].average
         }
       }
       this.gamesList = items;

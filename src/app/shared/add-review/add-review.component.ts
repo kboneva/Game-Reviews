@@ -10,8 +10,7 @@ import { IReview } from 'src/app/core/interfaces';
 })
 export class AddReviewComponent implements OnInit {
 
-  @Input() gameId!: string;
-  userId!: string;
+
   errorMessage = '';
   text = '';
   rating = 5;
@@ -30,7 +29,6 @@ export class AddReviewComponent implements OnInit {
   constructor(private formBuilder: FormBuilder, private authService: AuthService) { }
 
   ngOnInit(): void {
-    this.authService.currentId$.subscribe(id => this.userId = id);
     if (!!this.currentReview)
     {
       this.reviewForm.patchValue({
@@ -41,14 +39,12 @@ export class AddReviewComponent implements OnInit {
   }
 
   submit(): void {
-    const data = {rating: this.reviewForm.value.rating, text: this.reviewForm.value.text, gameId: this.gameId, userId: this.userId}
+    const data = {rating: this.reviewForm.value.rating, text: this.reviewForm.value.text}
     this.addItem.emit(data);
   }
 
   update(): void {
     const data = {reviewId: this.currentReview!._id, rating: this.reviewForm.value.rating, text: this.reviewForm.value.text};
-    console.log("collect new data in form");
-    console.log("emit to reviews");
     this.updateItem.emit(data);
   }
 

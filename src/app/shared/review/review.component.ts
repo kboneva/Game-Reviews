@@ -13,6 +13,7 @@ import { UserService } from 'src/app/core/services/user.service';
 export class ReviewComponent implements OnInit {
 
   @Input() reviewId!: string;
+  @Input() displayGame = false;
   review!: IReview;
   user!: IUser;
   game!: IGame;
@@ -44,13 +45,11 @@ export class ReviewComponent implements OnInit {
   }
   
   toggleEditMode() {
-    console.log("show add-review and pass old data to it");
     this.editing = !this.editing; // TODO make cancel button inside review component OR add the add-review component inside review component as a template.
   }
 
   updateReview(data: {reviewId: string, rating: number, text: string}){
     const formData = {rating: data.rating, text: data.text};
-    console.log("pass to review service then ngInit");
     this.reviewService.updateReview$(data.reviewId, formData)
     .then(() => {
       this.editing = false;
@@ -59,7 +58,7 @@ export class ReviewComponent implements OnInit {
   }
 
   remove(): void {
-    const data = {reviewId: this.reviewId, userId: this.review.userId, gameId: this.review.gameId}
+    const data = {reviewId: this.reviewId, reviewRating: this.review.rating}
     this.removeItem.emit(data);
   }
 }

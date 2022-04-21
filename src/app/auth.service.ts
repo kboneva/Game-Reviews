@@ -39,9 +39,11 @@ export class AuthService {
     createUserWithEmailAndPassword(this.auth, userData.email, userData.password)
     .then(userCredential => {
       const user = userCredential.user;
-      updateProfile(user, {displayName: userData.username}); // TODO pfp
+      const avatarUrl = '/assets/avatar.jpg';
+      updateProfile(user, {displayName: userData.username, photoURL: avatarUrl});
       set(ref(this.db, 'users/' + user.uid), {
         _id: user.uid,
+        avatar: avatarUrl,
         username: userData.username,
         reviews: []
       })

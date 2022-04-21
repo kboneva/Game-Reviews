@@ -2,22 +2,27 @@
     <ng-container *ngIf="!editing else editMode">
         <div class="card card-body">
             <div class="wrapper">
+                <a [routerLink]="['/games', game._id]" *ngIf="displayGame" class="game-title">
+                    <h3 class="card-title">{{game.title}}</h3>
+                </a>
                 <h5 class="card-title">Rating: <span [ngClass]="review.rating >= 5 ? 'positive' : 'negative'">{{review.rating}}</span></h5>
+            </div>
+    
+            <div class="wrapper">
+                <ng-container *ngIf="!!review.text">
+                    <p class="card-title col-8">{{review.text}}</p>
+                </ng-container>
                 <ng-container *ngIf="!!user else loading">
                     <ng-container *ngIf="!!user.username else anonymous">
-                        <p class="card-title">{{user.username}}</p>
+                        <p class="card-title col-2 text-right">{{user.username}}</p>
                     </ng-container>
                 </ng-container>
             </div>
-    
-            <ng-container *ngIf="!!review.text">
-                <p class="card-title">{{review.text}}</p>
-            </ng-container>
             
             <div class="wrapper">
                 <div *ngIf="canInteract">
-                    <button class="btn btn-primary" (click)="toggleEditMode()">Update</button>
-                    <button class="btn btn-danger" (click)="remove()">Delete</button>
+                    <button class="btn btn-outline-primary" (click)="toggleEditMode()">Update</button>
+                    <button class="btn btn-outline-danger" (click)="remove()">Delete</button>
                 </div>
                 <p class="text-right text-muted">{{review.postedAt | date: "dd MMM YYYY"}}</p>
             </div>

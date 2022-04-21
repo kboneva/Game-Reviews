@@ -1,6 +1,6 @@
 import { RouterModule, Routes } from '@angular/router';
-import { ErrorPageComponent } from './shared/pages/error-page/error-page.component';
-import { HomePageComponent } from './shared/pages/home-page/home-page.component';
+import { ErrorPageComponent } from './feature/pages/error-page/error-page.component';
+import { HomePageComponent } from './feature/pages/home-page/home-page.component';
 
 const routes: Routes = [
   {

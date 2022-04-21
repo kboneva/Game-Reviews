@@ -14,6 +14,7 @@ export class GamePageComponent implements OnInit {
 
   gameId!: string;
   game!: IGame;
+  userId!: string;
   addReviewShow: boolean = false;
   inEditMode: boolean = false;
 
@@ -26,23 +27,24 @@ export class GamePageComponent implements OnInit {
       this.gameId = params['uid'];
       this.gameService.loadGameById$(this.gameId).subscribe(game => {
         this.game = game;
+        this.game._id = this.gameId;
         if (!!game.reviews){
           this.game.reviews = Object.keys(game.reviews);
+          this.authService.currentId$.subscribe(id => this.userId = id);
         }
       })
     })
   }
 
-  submitReview(data: {rating: number, text: string, gameId: string, userId: string}): void {
-    const formData = {rating: data.rating, text: data.text};
-    this.reviewService.submitReview$(formData, data.gameId, data.userId)
+  submitReview(data: {rating: number, text: string}): void {
+    this.reviewService.submitReview$(data, this.game, this.userId)
     .then(() => {
       this.ngOnInit();
     });
   }
 
-  deleteReview(data: {reviewId: string, userId: string, gameId: string}): void {
-    this.reviewService.deleteReview$(data.reviewId, data.userId, data.gameId)
+  deleteReview(data: {reviewId: string, reviewRating: number}): void {
+    this.reviewService.deleteReview$(data.reviewId, data.reviewRating, this.userId, this.game)
     .then(() => {
       this.ngOnInit();
     })

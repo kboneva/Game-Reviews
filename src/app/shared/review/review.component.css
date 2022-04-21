@@ -18,3 +18,8 @@
 .negative {
     color: red;
 }
+
+.game-title {
+    text-decoration: none;
+    color: inherit
+}

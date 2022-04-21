@@ -6,4 +6,5 @@ export interface IGame {
     genre: string[];
     releaseDate: string;
     reviews: string[];
+    average: number;
 }
