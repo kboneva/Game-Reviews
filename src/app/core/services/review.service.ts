@@ -16,16 +16,19 @@ export class ReviewService {
   }
 
   async submitReview$(reviewData: {rating: number, text: string}, game: IGame, userId: string): Promise<void> {
+    const newAverage = !!game.reviews ? (game.average * game.reviews.length + reviewData.rating) / (game.reviews.length + 1) : reviewData.rating;
+
+    const reviewId = push(child(ref(this.db), 'reviews')).key;
+
     const review = {
+      _id: reviewId,
       rating: reviewData.rating,
       text: reviewData.text,
       userId: userId,
       gameId: game._id,
       postedAt: formatDate(Date.now(), 'YYYY-MM-dd', 'en')
     }
-
-    const reviewId = push(child(ref(this.db), 'reviews')).key;
-    const newAverage = (game.average * game.reviews.length + reviewData.rating) / (game.reviews.length + 1);
+    
 
     const updates: any = {};
     updates[`/reviews/${reviewId}`] = review;
@@ -40,7 +43,7 @@ export class ReviewService {
   }
 
   async deleteReview$(reviewId: string, reviewRating: number, userId: string, game: IGame): Promise<void> {
-    const newAverage = (game.average * game.reviews.length - reviewRating) / (game.reviews.length - 1);
+    const newAverage = game.reviews.length == 1 ? 0 : (game.average * game.reviews.length - reviewRating) / (game.reviews.length - 1);
 
     const updates: any = {};
     updates[`/reviews/${reviewId}`] = null;
@@ -54,15 +57,15 @@ export class ReviewService {
     })
   }
 
-  async updateReview$(reviewId: string, formData: {rating: number, text: string}): Promise<void> {
-    //const newAverage = (game.average * game.reviews.length + reviewData.rating) / (game.reviews.length + 1); TODO update average rating when editing reviews
+  async updateReview$(reviewId: string, formData: {rating: number, text: string}, game: IGame, oldRating: number): Promise<void> {
+    const newAverage = (game.average * game.reviews.length - oldRating + formData.rating) / game.reviews.length;
 
-    const data = {
-      rating: formData.rating,
-      text: formData.text
-    }
+    const updates: any = {};
+    updates[`/reviews/${reviewId}/rating`] = formData.rating;
+    updates[`/reviews/${reviewId}/text`] = formData.text;
+    updates[`/games/${game._id}/average`] = newAverage;
 
-    await update(ref(this.db, 'reviews/' + reviewId), data)
+    await update(ref(this.db), updates)
     .catch(error => {
       console.log(error);
     });

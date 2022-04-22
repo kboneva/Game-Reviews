@@ -1,1 +1,13 @@
-<p>home-page works!</p>
+<h4 class="card-title">Highest rated games</h4>
+<div *ngIf="!!highest else loading">
+    <app-home-game *ngFor="let game of highest" [game]="game"></app-home-game>
+</div>
+<br>
+<h4 class="card-title">Most controversial games</h4>
+<div *ngIf="!!lowest else loading">
+    <app-home-game *ngFor="let game of lowest" [game]="game"></app-home-game>
+</div>
+
+<ng-template #loading>
+    <p>Loading....</p>
+</ng-template>

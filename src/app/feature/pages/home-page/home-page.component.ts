@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { IReview } from 'src/app/core/interfaces';
+import { IGame } from 'src/app/core/interfaces';
 import { GameService } from 'src/app/core/services/game.service';
 
 @Component({
@@ -9,13 +9,17 @@ import { GameService } from 'src/app/core/services/game.service';
 })
 export class HomePageComponent implements OnInit {
 
-  highest?: IReview[];
-  lowest?: IReview[];
+  highest?: IGame[];
+  lowest?: IGame[];
 
   constructor(private gameService: GameService) { }
 
   ngOnInit(): void {
+    this.gameService.loadTopThree$(true).subscribe(games => {
+      this.highest = games;
+    })
+    this.gameService.loadTopThree$(false).subscribe(games => {
+      this.lowest = games;
+    })
   }
-
-      // TODO top 3 highest rated games, top 3 lowest rated games ASIDE
 }

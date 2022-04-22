@@ -1,8 +1,9 @@
 <div class="card-header wrapper">
-    <div>
-        <h2 class="card-title">{{game.title}} - {{game.average}}</h2>
+    <div class="wrapper">
+        <div class="average-rating {{game.average > 0 ? (game.average >= 5 ? 'positive' : 'negative') : 'neutral'}}">{{game.average > 0 ? game.average : '-'}}</div>
+        <h2 class="card-title">{{game.title}}</h2>
     </div>
-    <h5 class="card-title">{{game.developer}}</h5>
+    <h5 class="card-title pb-3">{{game.developer}}</h5>
 </div>
 <div class="card-body">
     <p class="card-text">{{game.description}}</p>

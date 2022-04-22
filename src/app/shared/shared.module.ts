@@ -1,17 +1,17 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReviewComponent } from './review/review.component';
-import { AddReviewComponent } from './add-review/add-review.component';
 import { NgbRatingModule } from '@ng-bootstrap/ng-bootstrap';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { HomeGameComponent } from './home-game/home-game.component';
 
 
 
 @NgModule({
   declarations: [
     ReviewComponent,
-    AddReviewComponent
+    HomeGameComponent
   ],
   imports: [
     CommonModule,
@@ -21,7 +21,7 @@ import { RouterModule } from '@angular/router';
   ],
   exports: [
     ReviewComponent,
-    AddReviewComponent
+    HomeGameComponent
   ]
 })
 export class SharedModule { }

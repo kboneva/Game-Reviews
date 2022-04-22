@@ -1,9 +1,10 @@
 <div class="card card-body">
     <div class="wrapper">
-        <a [routerLink]="['/games', game._id]" class="game-title">
+        <a [routerLink]="['/games', game._id]" class="game-title wrapper">
+            <div class="average-rating {{game.average > 0 ? (game.average >= 5 ? 'positive' : 'negative') : 'd-none'}}">{{game.average}}</div>
             <h3 class="card-title">{{game.title}}</h3>
         </a>
-        <h5 class="card-title">{{game.developer}}</h5>
+        <h5 class="card-title pb-3">{{game.developer}}</h5>
     </div>
     
     <p class="card-text">{{(game.description.length > 250) ? (game.description | slice:0:300) + "..." : (game.description)}}</p>

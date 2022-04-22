@@ -1,5 +1,5 @@
 :host {
-    max-width: 1200px;
+    max-width: 1000px;
     display: block;
     margin: auto;
     padding: 3rem;
@@ -14,8 +14,7 @@
 }
 
 .avatar {
-    margin-top: 20px;
-    margin-left: 20px;
+    margin: 10px;
     width: 100px;
     height: 100px;
     object-fit: cover;

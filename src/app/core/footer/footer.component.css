@@ -4,7 +4,19 @@
 }
 
 footer {
-    max-width: 1200px;
+    max-width: 1000px;
     margin: auto;
     padding: 10px;
+}
+
+i {
+    font-size: 32px;
+}
+
+.wrapper {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    justify-content: space-between;
+    align-items: center;
 }

@@ -1,12 +1,12 @@
 :host {
-    max-width: 1200px;
+    max-width: 1000px;
     display: block;
     margin: auto;
     padding: 3rem;
 }
 
 .container {
-    width: 50%;
+    width: 60%;
     text-align: center;
     padding: 3rem;
     box-shadow: 0px 5px 10px 0px rgba(0,0,0,0.5);

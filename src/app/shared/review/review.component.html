@@ -2,29 +2,28 @@
     <ng-container *ngIf="!editing else editMode">
         <div class="card card-body">
             <div class="wrapper">
-                <a [routerLink]="['/games', game._id]" *ngIf="displayGame" class="game-title">
-                    <h3 class="card-title">{{game.title}}</h3>
-                </a>
+                <ng-container *ngIf="displayGame">
+                    <a *ngIf="!!game" [routerLink]="['/games', game._id]" class="game-title">
+                        <h3 class="card-title">{{game.title}}</h3>
+                    </a>
+                </ng-container>
                 <h5 class="card-title">Rating: <span [ngClass]="review.rating >= 5 ? 'positive' : 'negative'">{{review.rating}}</span></h5>
             </div>
     
-            <div class="wrapper">
+            <div class="wrapper {{!!review.text ? '' : 'justify-content-end'}}">
                 <ng-container *ngIf="!!review.text">
-                    <p class="card-title col-8">{{review.text}}</p>
-                </ng-container>
-                <ng-container *ngIf="!!user else loading">
-                    <ng-container *ngIf="!!user.username else anonymous">
-                        <p class="card-title col-2 text-right">{{user.username}}</p>
-                    </ng-container>
+                    <p class="card-title col-9">{{review.text}}</p>
                 </ng-container>
             </div>
             
-            <div class="wrapper">
-                <div *ngIf="canInteract">
-                    <button class="btn btn-outline-primary" (click)="toggleEditMode()">Update</button>
-                    <button class="btn btn-outline-danger" (click)="remove()">Delete</button>
+            <div class="wrapper mb-0">
+                <div *ngIf="!!user else loading">
+                    <p class="text-muted">by {{!!user.username ? user.username : "Anonymous"}}, {{review.postedAt | date: "dd MMM YYYY"}}</p>
                 </div>
-                <p class="text-right text-muted">{{review.postedAt | date: "dd MMM YYYY"}}</p>
+                <div *ngIf="canInteract" class="pb-3">
+                    <button class="btn btn-outline-primary mr" (click)="toggleEditMode()">Update</button>
+                    <button class="btn btn-outline-danger mr" (click)="remove()">Delete</button>
+                </div>
             </div>
         </div>
     </ng-container>
@@ -34,11 +33,35 @@
     <p>Loading...</p>
 </ng-template>
 
-<ng-template #anonymous>
-    <p class="card-title">Anonymous</p>
-</ng-template>
-
 <ng-template #editMode>
-    <app-add-review [editing]="true" [currentReview]="this.review" (updateItem)="updateReview($event)"></app-add-review>
-    <button class="btn btn-danger m-3" (click)="toggleEditMode()" *ngIf="editing">Cancel</button>
+    <div class="card card-body">
+        <form class="update-review" [formGroup]="reviewForm" (ngSubmit)="updateReview()">
+            <fieldset>
+                
+                <div class="rating">
+                    <h5 class="card-title"><b class="filled">{{rating}}</b> stars</h5>
+                    <ngb-rating formControlName="rating" [(rate)]="rating">
+                        <ng-template let-fill="fill">
+                            <span class="star" [class.filled]="fill === 100">&#9733;</span>
+                          </ng-template>
+                    </ngb-rating>
+                </div>
+    
+                <div class="text">
+                    <label for="text"></label>
+                    <textarea formControlName="text" class="form-control {{showError('text') ?  'is-invalid' : ''}}" name="text" id="text" placeholder="Your critique here.">{{text}}</textarea>
+                    <ng-container *ngIf="showError('text')">
+                        <p class="invalid-feedback" *ngIf="validation('text', 'maxLength')">Field is past the max length treshold!</p>
+                    </ng-container>
+                </div>
+    
+
+                <div class="button">
+                    <button class="btn btn-primary m-3" [disabled]="this.reviewForm.invalid">Update</button>
+                    <button class="btn btn-danger m-3" (click)="toggleEditMode()">Cancel</button>
+                </div>
+                
+            </fieldset>
+        </form>
+    </div>
 </ng-template>

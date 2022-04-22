@@ -11,3 +11,23 @@
     text-decoration: none;
     color: inherit
 }
+
+.average-rating {
+    display: block;
+    font-size: 20px;
+    text-align: center;
+    width: 35px;
+    height: 35px;
+    border-radius: 5px;
+    margin-bottom: 0.5rem;
+}
+
+.positive {
+    background-color: green;
+    color: white;
+}
+
+.negative {
+    background-color: red;
+    color: white;
+}

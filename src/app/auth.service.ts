@@ -1,32 +1,28 @@
 import { Injectable } from '@angular/core';
-import { Auth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, updateProfile, AuthErrorCodes } from '@angular/fire/auth';
+import { Auth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, updateProfile, AuthErrorCodes, User } from '@angular/fire/auth';
 import { Database, ref, set } from '@angular/fire/database';
 import { Router } from '@angular/router';
 import { BehaviorSubject, map } from 'rxjs';
-import { IUser } from './core/interfaces';
-import { UserService } from './core/services/user.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-  private _currentUser = new BehaviorSubject<IUser>(undefined!);
+  private _currentUser = new BehaviorSubject<User>(undefined!);
 
   currentUser$ = this._currentUser.asObservable();
-  currentId$ = this.currentUser$.pipe(map(user => user._id));
+  currentId$ = this.currentUser$.pipe(map(user => user.uid));
   isLogged$ = this.currentUser$.pipe(map(user => !!user));
 
-  constructor(private auth: Auth, private router: Router, private userService: UserService, private db: Database) { 
+  constructor(private auth: Auth, private router: Router, private db: Database) { 
     this.authStateListener();
   }
 
   authStateListener() {
     this.auth.onAuthStateChanged(user => {
       if (user) {
-        this.userService.loadUser$(user.uid).subscribe(currentUser => {
-          this._currentUser.next(currentUser);
-        })
+        this._currentUser.next(user);
       } 
       else {
         this._currentUser.next(undefined!);
@@ -52,9 +48,6 @@ export class AuthService {
       })
     })
     .then(() => {
-      this.authStateListener();
-    })
-    .then(() => {
       this.router.navigate(["/home"]);
     })
     .catch(error => {
@@ -71,9 +64,6 @@ export class AuthService {
     
     signInWithEmailAndPassword(this.auth, userData.email, userData.password)
     .then(() => {
-      this.authStateListener();
-    })
-    .then(() => {
       this.router.navigate(["/home"]);
     })
     .catch((error) => {
@@ -87,9 +77,6 @@ export class AuthService {
 
   logout(): void {
     signOut(this.auth)
-    .then(() => {
-      this.authStateListener();
-    })
     .then(() => {
       this.router.navigate(["/user/login"]);
     });

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from 'src/app/auth.service';
 import { IUser } from 'src/app/core/interfaces';
 import { UserService } from 'src/app/core/services/user.service';
@@ -10,9 +11,17 @@ import { UserService } from 'src/app/core/services/user.service';
 })
 export class ProfileComponent implements OnInit {
 
-  constructor(private authService: AuthService, private userService: UserService) { }
-
+  editing: boolean = false;
   currentUser!: IUser;
+
+  profileForm: FormGroup = this.formBuilder.group({
+    "username": [null, { validators: [Validators.maxLength(50)], updateOn: 'change'}],
+    "avatar": [null, { validators: [Validators.maxLength(200)], updateOn: 'change'}] // TODO url validator?
+  })
+
+  constructor(private authService: AuthService, private userService: UserService, private formBuilder: FormBuilder) { }
+
+
 
   ngOnInit(): void {
     this.authService.currentId$.subscribe(id => {
@@ -30,4 +39,30 @@ export class ProfileComponent implements OnInit {
     // TODO edit profile: change username and pfp, change email and password(?), 
   }
 
+  editProfileToggle() {
+    this.editing = !this.editing;
+    if (this.editing)
+    {
+      this.profileForm.patchValue({
+        "username": this.currentUser.username,
+        "avatar": this.currentUser.avatar
+      })
+    }
+  }
+
+  updateProfile(){
+    this.userService.updateProfile$(this.currentUser._id, this.profileForm.value)
+    .then(() => {
+      this.editing = false;
+      this.ngOnInit();
+    })
+  }
+  
+  showError(property: string): boolean {
+    return this.profileForm.controls[property].invalid && this.profileForm.controls[property].touched;
+  }
+
+  validation(property: string, validator: string): boolean {
+    return this.profileForm.controls[property].errors?.[validator];
+  }
 }
