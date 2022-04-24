@@ -7,6 +7,8 @@ import { RouterModule } from '@angular/router';
 import { AuthService } from 'src/app/auth.service';
 import { GameService } from './services/game.service';
 import { ReviewService } from './services/review.service';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { ErrorInterceptor } from './error.interceptor';
 
 
 
@@ -27,7 +29,12 @@ import { ReviewService } from './services/review.service';
     UserService,
     AuthService,
     GameService,
-    ReviewService
+    ReviewService,
+    {
+      provide: HTTP_INTERCEPTORS,
+      multi: true,
+      useClass: ErrorInterceptor
+    }
     ]
 })
 export class CoreModule { }

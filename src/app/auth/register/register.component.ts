@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from 'src/app/auth.service';
+import { checkPasswords } from '../utils';
 
 @Component({
   selector: 'app-register',
@@ -11,11 +12,14 @@ export class RegisterComponent implements OnInit {
 
   constructor(private authService: AuthService, private formBuilder: FormBuilder) { }
 
+  passwordControl = new FormControl(null, { validators: [Validators.required, Validators.minLength(5)], updateOn: 'change'});
+  repeatPasswordControl = new FormControl(null, { validators: [Validators.required, checkPasswords(this.passwordControl)], updateOn: 'change'});
+
   registerForm: FormGroup = this.formBuilder.group({
-    "username": [null, { validators: [Validators.required], updateOn: 'change'}],
+    "username": [null, { validators: [Validators.required, Validators.minLength(3)], updateOn: 'change'}],
     "email": [null, { validators: [Validators.required, Validators.email], updateOn: 'change'}],
-    "password": [null, { validators: [Validators.required], updateOn: 'change'}],
-    "repeatPassword": [null, { validators: [Validators.required], updateOn: 'change'}]
+    "password": this.passwordControl,
+    "repeatPassword": this.repeatPasswordControl
   })
 
   ngOnInit(): void {

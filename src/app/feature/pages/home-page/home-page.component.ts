@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { throwError } from 'rxjs';
 import { IGame } from 'src/app/core/interfaces';
 import { GameService } from 'src/app/core/services/game.service';
 

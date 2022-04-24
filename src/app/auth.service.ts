@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core';
-import { Auth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, updateProfile, AuthErrorCodes, User } from '@angular/fire/auth';
+import { Auth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, updateProfile, User, updateEmail, updatePassword } from '@angular/fire/auth';
 import { Database, ref, set } from '@angular/fire/database';
 import { Router } from '@angular/router';
 import { BehaviorSubject, map } from 'rxjs';
+import { processError } from './auth/utils';
+import { NotificationService, NotificationType } from './core/services/notification.service';
 
 @Injectable({
   providedIn: 'root'
@@ -15,9 +17,11 @@ export class AuthService {
   currentId$ = this.currentUser$.pipe(map(user => user.uid));
   isLogged$ = this.currentUser$.pipe(map(user => !!user));
 
-  constructor(private auth: Auth, private router: Router, private db: Database) { 
+  constructor(private auth: Auth, private router: Router, private db: Database, private notifService: NotificationService) { 
     this.authStateListener();
   }
+
+  // TODO admin role, can add games !!
 
   authStateListener() {
     this.auth.onAuthStateChanged(user => {
@@ -30,8 +34,34 @@ export class AuthService {
     });
   }
 
+  editProfile(username: string, avatar: string) {
+    this.currentUser$.subscribe(user => {
+      updateProfile(user, {displayName: username, photoURL: avatar})
+      .then(() => {
+        this.notifService.notify({
+          message:"Successfully updated your account!",
+          type: NotificationType.Success
+        })
+      })
+      .catch(err => {
+        processError(err, this.notifService);
+      });
+    })
+  }
+
+  // changeEmail(email: string) {
+  //   this.currentUser$.subscribe(user => {
+  //     updateEmail(user, email);
+  //   })
+  // }
+  // // TODO edit profile: change email and password(?)
+  // changePassword(password: string) {
+  //   this.currentUser$.subscribe(user => {
+  //     updatePassword(user, password);
+  //   })
+  // }
+
   register(userData: {username: string, email: string, password: string, repeatPassword: string}): void {
-    // TODO validate
     createUserWithEmailAndPassword(this.auth, userData.email, userData.password)
     .then(userCredential => {
       const user = userCredential.user;
@@ -43,42 +73,46 @@ export class AuthService {
         username: userData.username,
         reviews: []
       })
-      .catch(error => {
-        console.log(error);
-      })
     })
     .then(() => {
+      this.notifService.notify({
+        message:"Successfully created an account!",
+        type: NotificationType.Success
+      })
       this.router.navigate(["/home"]);
     })
-    .catch(error => {
-      if (error.code == AuthErrorCodes.EMAIL_EXISTS){
-        console.log("Email already in use!"); // TODO error pop-ups
-      }
-      else console.log("Something went wrong.")
+    .catch(err => {
+      processError(err, this.notifService);
     })
   }
 
 
   login(userData: {email: string, password: string}): void {
-    // TODO validate
-    
     signInWithEmailAndPassword(this.auth, userData.email, userData.password)
     .then(() => {
+      this.notifService.notify({
+        message:"Welcome back!",
+        type: NotificationType.Success
+      })
       this.router.navigate(["/home"]);
     })
-    .catch((error) => {
-      if(error.code == AuthErrorCodes.USER_DELETED){
-        console.log("No such user found!"); // TODO error pop-ups
-      }
-      else console.log("Something went wrong.")
-    });
+    .catch(err => {
+      processError(err, this.notifService);
+    })
   }
 
 
   logout(): void {
     signOut(this.auth)
     .then(() => {
+      this.notifService.notify({
+        message:"We hope to see you again!",
+        type: NotificationType.Success
+      })
       this.router.navigate(["/user/login"]);
+    })
+    .catch(err => {
+      processError(err, this.notifService);
     });
   }
 }

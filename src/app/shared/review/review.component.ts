@@ -18,12 +18,13 @@ export class ReviewComponent implements OnInit {
   review!: IReview;
   user!: IUser;
   game!: IGame;
-  canInteract!: boolean;
   @Output() removeItem: EventEmitter<any> = new EventEmitter();
   editing: boolean = false;
 
   text = '';
   rating = 5;
+
+  currentId$ = this.authService.currentId$;
 
   reviewForm: FormGroup = this.formBuilder.group({
     "rating": [this.rating, { validators: [Validators.required, Validators.max(10)], updateOn: 'change'}],
@@ -43,11 +44,6 @@ export class ReviewComponent implements OnInit {
             if (!!game.reviews){
               this.game.reviews = Object.keys(game.reviews);
             }
-            this.authService.currentId$.subscribe(id => {
-              if (!!id && id == this.user._id) {
-                this.canInteract = true;
-              }
-            })
           })
         })
       });
@@ -75,7 +71,7 @@ export class ReviewComponent implements OnInit {
   }
 
   remove(): void {
-    const data = {reviewId: this.reviewId, reviewRating: this.review.rating}
+    const data = {reviewId: this.reviewId, reviewRating: this.review.rating, game: this.game}
     this.removeItem.emit(data);
   }
 

@@ -12,6 +12,7 @@
                 <input formControlName="username" class="form-control {{showError('username') ?  'is-invalid' : ''}}" type="text" name="username" id="username" placeholder="Your name">
                 <ng-container *ngIf="showError('username')">
                     <p class="invalid-feedback" *ngIf="validation('username', 'required')">Username is required!</p>
+                    <p class="invalid-feedback" *ngIf="validation('username', 'minlength') && !validation('username', 'required')">Name is too short!</p>
                 </ng-container>
             </div>
 
@@ -29,6 +30,7 @@
                 <input formControlName="password" class="form-control {{showError('password') ?  'is-invalid' : ''}}" type="password" name="password" id="password" placeholder="**********">
                 <ng-container *ngIf="showError('password')">
                     <p class="invalid-feedback" *ngIf="validation('password', 'required')">Password is required!</p>
+                    <p class="invalid-feedback" *ngIf="validation('password', 'minlength') && !validation('password', 'required')">Password is too short!</p>
                 </ng-container>
             </div>
             
@@ -36,12 +38,13 @@
                 <label for="repeatPassword"></label>
                 <input formControlName="repeatPassword" class="form-control {{showError('repeatPassword') ?  'is-invalid' : ''}}" type="password" name="repeatPassword" id="repeatPassword" placeholder="**********">
                 <ng-container *ngIf="showError('repeatPassword')">
-                    <p class="invalid-feedback" *ngIf="validation('repeatPassword', 'required')">Passwords don't match!</p>
+                    <p class="invalid-feedback" *ngIf="validation('repeatPassword', 'required')">Confirm your password!</p>
+                    <p class="invalid-feedback" *ngIf="validation('repeatPassword', 'passwordsDontMatch')">Passwords don't match!</p>
                 </ng-container>
             </div>
 
             <div class="button">
-                <button class="btn btn-success m-3" [disabled]="this.registerForm.invalid">Register</button>
+                <button class="btn btn-success m-3" [disabled]="registerForm.invalid">Register</button>
             </div>
 
         </fieldset>

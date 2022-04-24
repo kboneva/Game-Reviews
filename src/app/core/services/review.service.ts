@@ -3,13 +3,15 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { child, Database, push, ref, update } from '@angular/fire/database';
 import { Observable } from 'rxjs';
+import { processError } from 'src/app/auth/utils';
 import { environment } from 'src/environments/environment';
 import { IGame, IReview } from '../interfaces';
+import { NotificationService, NotificationType } from './notification.service';
 
 @Injectable()
 export class ReviewService {
 
-  constructor(private http: HttpClient, private db: Database) { }
+  constructor(private http: HttpClient, private db: Database, private notifService: NotificationService) { }
 
   loadReviewById$(_id: string): Observable<IReview> {
     return this.http.get<IReview>(`${environment.firebase.databaseURL}/reviews/${_id}.json`);
@@ -37,9 +39,15 @@ export class ReviewService {
     updates[`/games/${game._id}/average`] = newAverage;
 
     await update(ref(this.db), updates)
-    .catch(error => {
-      console.log(error);
+    .then(() => {
+      this.notifService.notify({
+        message:"Submitted review",
+        type: NotificationType.Success
+      })
     })
+    .catch(err => {
+      processError(err, this.notifService);
+    });
   }
 
   async deleteReview$(reviewId: string, reviewRating: number, userId: string, game: IGame): Promise<void> {
@@ -52,9 +60,15 @@ export class ReviewService {
     updates[`/games/${game._id}/average`] = newAverage;
 
     await update(ref(this.db), updates)
-    .catch(error => {
-      console.log(error);
+    .then(() => {
+      this.notifService.notify({
+        message:"Deleted review",
+        type: NotificationType.Success
+      })
     })
+    .catch(err => {
+      processError(err, this.notifService);
+    });
   }
 
   async updateReview$(reviewId: string, formData: {rating: number, text: string}, game: IGame, oldRating: number): Promise<void> {
@@ -66,8 +80,14 @@ export class ReviewService {
     updates[`/games/${game._id}/average`] = newAverage;
 
     await update(ref(this.db), updates)
-    .catch(error => {
-      console.log(error);
+    .then(() => {
+      this.notifService.notify({
+        message:"Updated review",
+        type: NotificationType.Success
+      })
+    })
+    .catch(err => {
+      processError(err, this.notifService);
     });
   }
 }

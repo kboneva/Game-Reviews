@@ -20,7 +20,7 @@
                 <div *ngIf="!!user else loading">
                     <p class="text-muted">by {{!!user.username ? user.username : "Anonymous"}}, {{review.postedAt | date: "dd MMM YYYY"}}</p>
                 </div>
-                <div *ngIf="canInteract" class="pb-3">
+                <div *ngIf="(currentId$ | async) == review.userId" class="pb-3">
                     <button class="btn btn-outline-primary mr" (click)="toggleEditMode()">Update</button>
                     <button class="btn btn-outline-danger mr" (click)="remove()">Delete</button>
                 </div>

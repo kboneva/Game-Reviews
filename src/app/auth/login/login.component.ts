@@ -13,7 +13,7 @@ export class LoginComponent implements OnInit {
 
   loginForm: FormGroup = this.formBuilder.group({
     "email": [null, { validators: [Validators.required, Validators.email], updateOn: 'change'}],
-    "password": [null, { validators: [Validators.required], updateOn: 'change'}]
+    "password": [null, { validators: [Validators.required, Validators.minLength(5)], updateOn: 'change'}]
   })
 
   constructor(private authService: AuthService, private formBuilder: FormBuilder) { }

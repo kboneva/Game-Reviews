@@ -21,6 +21,7 @@
                 <input formControlName="password" class="form-control {{showError('password') ?  'is-invalid' : ''}}" type="password" name="password" id="password" placeholder="**********">
                 <ng-container *ngIf="showError('password')">
                     <p class="invalid-feedback" *ngIf="validation('password', 'required')">Password is required!</p>
+                    <p class="invalid-feedback" *ngIf="validation('password', 'minlength')">Password is too short!</p>
                 </ng-container>
             </div>
 

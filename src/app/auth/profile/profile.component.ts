@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from 'src/app/auth.service';
-import { IUser } from 'src/app/core/interfaces';
+import { IGame, IUser } from 'src/app/core/interfaces';
+import { ReviewService } from 'src/app/core/services/review.service';
 import { UserService } from 'src/app/core/services/user.service';
 
 @Component({
@@ -14,13 +15,14 @@ export class ProfileComponent implements OnInit {
   editing: boolean = false;
   currentUser!: IUser;
 
+  defaultAvatar = '/assets/avatar.jpg';
+
   profileForm: FormGroup = this.formBuilder.group({
     "username": [null, { validators: [Validators.maxLength(50)], updateOn: 'change'}],
-    "avatar": [null, { validators: [Validators.maxLength(200)], updateOn: 'change'}] // TODO url validator?
+    "avatar": [null, {}]
   })
 
-  constructor(private authService: AuthService, private userService: UserService, private formBuilder: FormBuilder) { }
-
+  constructor(private authService: AuthService, private userService: UserService, private formBuilder: FormBuilder, private reviewService: ReviewService) { }
 
 
   ngOnInit(): void {
@@ -35,8 +37,6 @@ export class ProfileComponent implements OnInit {
         });
       }
     })
-
-    // TODO edit profile: change username and pfp, change email and password(?), 
   }
 
   editProfileToggle() {
@@ -51,9 +51,19 @@ export class ProfileComponent implements OnInit {
   }
 
   updateProfile(){
-    this.userService.updateProfile$(this.currentUser._id, this.profileForm.value)
+    const username = this.profileForm.value.username;
+    const avatar = this.profileForm.value.avatar ? this.profileForm.value.avatar : '/assets/avatar.jpg';
+    this.userService.updateProfile$(this.currentUser._id, username, avatar)
     .then(() => {
+      this.authService.editProfile(username, avatar)
       this.editing = false;
+      this.ngOnInit();
+    })
+  }
+
+  deleteReview(data: {reviewId: string, reviewRating: number, game: IGame}): void {
+    this.reviewService.deleteReview$(data.reviewId, data.reviewRating, this.currentUser._id, data.game)
+    .then(() => {
       this.ngOnInit();
     })
   }

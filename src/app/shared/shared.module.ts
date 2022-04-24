@@ -5,13 +5,17 @@ import { NgbRatingModule } from '@ng-bootstrap/ng-bootstrap';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { HomeGameComponent } from './home-game/home-game.component';
+import { GamesListComponent } from './games-list/games-list.component';
+import { NotificationComponent } from './notification/notification.component';
 
 
 
 @NgModule({
   declarations: [
     ReviewComponent,
-    HomeGameComponent
+    HomeGameComponent,
+    GamesListComponent,
+    NotificationComponent
   ],
   imports: [
     CommonModule,
@@ -21,7 +25,9 @@ import { HomeGameComponent } from './home-game/home-game.component';
   ],
   exports: [
     ReviewComponent,
-    HomeGameComponent
+    HomeGameComponent,
+    GamesListComponent,
+    NotificationComponent
   ]
 })
 export class SharedModule { }

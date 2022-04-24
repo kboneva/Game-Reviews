@@ -9,10 +9,10 @@
         </div>
     </div>
 
-    <h3 class="card-title">My reviews</h3>
+    <h2 class="card-title text-centered">My reviews</h2>
 
     <ng-container *ngIf="!!currentUser.reviews else noReviews">
-        <app-review *ngFor="let review of currentUser.reviews" [reviewId]="review" [displayGame]="true"></app-review>
+        <app-review *ngFor="let review of currentUser.reviews" [reviewId]="review" (removeItem)="deleteReview($event)" [displayGame]="true"></app-review>
     </ng-container>
 </div>
 
@@ -32,16 +32,14 @@
                 <label for="username"></label>
                 <input formControlName="username" class="form-control {{showError('username') ?  'is-invalid' : ''}}" type="text" name="username" id="username" placeholder="New name">
                 <ng-container *ngIf="showError('username')">
-                    <p class="invalid-feedback" *ngIf="validation('username', 'maxLength')">Username is too long!</p>
+                    <p class="invalid-feedback" *ngIf="validation('username', 'required')">Username is required!</p>
+                    <p class="invalid-feedback" *ngIf="validation('username', 'minlength') && !validation('username', 'required')">Username is too short!</p>
                 </ng-container>
             </div>
 
             <div class="avatarForm">
                 <label for="avatar"></label>
                 <input formControlName="avatar" class="form-control {{showError('avatar') ?  'is-invalid' : ''}}" type="text" name="avatar" id="avatar" placeholder="https://www.example.com/your/avatar">
-                <ng-container *ngIf="showError('avatar')">
-                    <p class="invalid-feedback" *ngIf="validation('avatar', 'url')">Invalid avatar url!</p>
-                </ng-container>
             </div>
 
 

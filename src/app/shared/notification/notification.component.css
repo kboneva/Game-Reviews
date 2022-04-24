@@ -1,0 +1,21 @@
+:host {
+    position: fixed;
+    top: 75px;
+    right: 200px;
+    margin: 0.5em;
+    z-index: 1200;
+  }
+
+.notification {
+    padding: 0.5rem;
+    border-radius: 5px;
+    color: white;
+}
+
+.positive {
+    background-color: green;
+}
+
+.negative {
+    background-color: red;
+}
