@@ -10,6 +10,10 @@ import { GameService } from 'src/app/core/services/game.service';
 export class AllGamesPageComponent implements OnInit {
 
   gamesList!: IGame[];
+  
+  page = 0;
+  pageSize = 4;
+  collectionSize!: number;  
 
   constructor(private gameServices: GameService) { }
 

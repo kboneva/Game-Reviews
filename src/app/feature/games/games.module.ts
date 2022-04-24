@@ -6,7 +6,7 @@ import { AllGamesPageComponent } from './all-games-page/all-games-page.component
 import { GamePageComponent } from './game-page/game-page.component';
 import { GamesRoutingModule } from './games-routing.module';
 import { ReactiveFormsModule } from '@angular/forms';
-import { NgbRatingModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbPaginationModule, NgbRatingModule } from '@ng-bootstrap/ng-bootstrap';
 import { SharedModule } from 'src/app/shared/shared.module';
 
 
@@ -23,7 +23,8 @@ import { SharedModule } from 'src/app/shared/shared.module';
     GamesRoutingModule,
     SharedModule,
     ReactiveFormsModule,
-    NgbRatingModule
+    NgbRatingModule,
+    NgbPaginationModule
   ]
 })
 

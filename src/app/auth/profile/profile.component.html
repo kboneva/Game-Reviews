@@ -12,7 +12,8 @@
     <h2 class="card-title text-centered">My reviews</h2>
 
     <ng-container *ngIf="!!currentUser.reviews else noReviews">
-        <app-review *ngFor="let review of currentUser.reviews" [reviewId]="review" (removeItem)="deleteReview($event)" [displayGame]="true"></app-review>
+        <app-review *ngFor="let review of currentUser.reviews | slice: (page-1) * pageSize : page * pageSize" [reviewId]="review" (removeItem)="deleteReview($event)" [displayGame]="true"></app-review>
+        <ngb-pagination [ngClass]="{'d-none': (currentUser.reviews.length <= pageSize)}" [(page)]="page" [pageSize]="pageSize" [collectionSize]="currentUser.reviews.length"></ngb-pagination>
     </ng-container>
 </div>
 
@@ -25,7 +26,7 @@
 </ng-template>
 
 <ng-template #editMode>
-    <form class="edit-profile" [formGroup]="profileForm" (ngSubmit)="updateProfile()">
+    <form class="edit-profile" [formGroup]="profileForm" (ngSubmit)="updateProfile$()">
         <fieldset>
             
             <div class="username">

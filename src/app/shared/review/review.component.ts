@@ -19,11 +19,13 @@ export class ReviewComponent implements OnInit {
   user!: IUser;
   game!: IGame;
   @Output() removeItem: EventEmitter<any> = new EventEmitter();
+  @Output() updateItem: EventEmitter<any> = new EventEmitter();
   editing: boolean = false;
 
   text = '';
   rating = 5;
 
+  loggedIn$ = this.authService.isLogged$;
   currentId$ = this.authService.currentId$;
 
   reviewForm: FormGroup = this.formBuilder.group({
@@ -61,17 +63,18 @@ export class ReviewComponent implements OnInit {
     }
   }
 
-  updateReview(){
+  async updateReview$(): Promise<void>{
     const formData = {rating: this.reviewForm.value.rating, text: this.reviewForm.value.text};
-    this.reviewService.updateReview$(this.review._id, formData, this.game, this.review.rating)
+    await this.reviewService.updateReview$(this.review._id, formData)
     .then(() => {
+      this.updateItem.emit();
       this.editing = false;
       this.ngOnInit();
     });
   }
 
   remove(): void {
-    const data = {reviewId: this.reviewId, reviewRating: this.review.rating, game: this.game}
+    const data = {reviewId: this.reviewId, gameId: this.review.gameId}
     this.removeItem.emit(data);
   }
 

@@ -6,6 +6,7 @@ import { ProfileComponent } from './profile/profile.component';
 import { AuthRoutingModule } from './auth-routing.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from '../shared/shared.module';
+import { NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
 
 
 
@@ -19,7 +20,8 @@ import { SharedModule } from '../shared/shared.module';
     CommonModule,
     AuthRoutingModule,
     ReactiveFormsModule,
-    SharedModule
+    SharedModule,
+    NgbPaginationModule
   ]
 })
 export class MyAuthModule { }

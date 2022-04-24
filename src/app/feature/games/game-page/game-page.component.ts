@@ -19,6 +19,10 @@ export class GamePageComponent implements OnInit {
   text = '';
   rating = 5;
 
+  page = 0;
+  pageSize = 3;
+  collectionSize!: number;
+
   isLogged$ = this.authService.isLogged$
 
   reviewForm: FormGroup = this.formBuilder.group({
@@ -29,37 +33,49 @@ export class GamePageComponent implements OnInit {
   constructor(private activatedRoute: ActivatedRoute, private gameService: GameService, private authService: AuthService, private reviewService: ReviewService, private formBuilder: FormBuilder) { }
 
   ngOnInit(): void {
-    this.activatedRoute.params.subscribe(params => {
+    this.activatedRoute.params.subscribe(async params => {
       this.gameId = params['uid'];
-      this.gameService.loadGameById$(this.gameId).subscribe(game => {
-        this.game = game;
-        if (!!game.reviews){
-          this.game.reviews = Object.keys(game.reviews);
-        }
-      })
+      await this.gameService.gameListener(this.gameId);
+      this.initialize();
+    })
+  }
+
+  initialize(){
+    this.gameService.loadGameById$(this.gameId).subscribe(async game => {
+      this.game = game;
+      if (!!game.reviews) {
+        this.game.reviews = Object.keys(game.reviews);
+      }
     })
   }
 
   submitReview(): void {
     const data = {rating: this.reviewForm.value.rating, text: this.reviewForm.value.text}
-    this.authService.currentId$.subscribe(id => {
-      this.reviewService.submitReview$(data, this.game, id)
+    this.authService.currentId$.subscribe(async id => {
+      await this.reviewService.submitReview$(data, this.gameId, id)
       .then(() => {
         this.addReviewShow = false;
-        this.ngOnInit();
+        this.reviewForm.patchValue({
+          rating: 5,
+          text: ''
+        })
+        this.initialize();
       });
     });
     
   }
 
-  deleteReview(data: {reviewId: string, reviewRating: number}): void {
-    this.authService.currentId$.subscribe(id => {
-      this.reviewService.deleteReview$(data.reviewId, data.reviewRating, id, this.game)
+  deleteReview(data: {reviewId: string, gameId: string}): void {
+    this.authService.currentId$.subscribe(async id => {
+      await this.reviewService.deleteReview$(data.reviewId, this.gameId, id)
       .then(() => {
-        this.ngOnInit();
+        this.initialize();
     })
     });
-    
+  }
+
+  updateAverage(){
+    this.initialize();
   }
 
   addReviewToggle(): void {

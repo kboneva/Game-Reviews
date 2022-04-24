@@ -2,7 +2,8 @@
     <app-game [game]="game"></app-game>
 
     <ng-container *ngIf="!!game.reviews else noReviews">
-        <app-review (removeItem)="deleteReview($event)" *ngFor="let review of game.reviews" [reviewId]="review"></app-review>
+        <app-review (removeItem)="deleteReview($event)" (updateItem)="updateAverage()" *ngFor="let review of game.reviews | slice: (page-1) * pageSize : page * pageSize" [reviewId]="review"></app-review>
+        <ngb-pagination [ngClass]="{'d-none': (game.reviews.length <= pageSize)}" [(page)]="page" [pageSize]="pageSize" [collectionSize]="game.reviews.length"></ngb-pagination>
     </ng-container>
     
     <ng-container *ngIf="(isLogged$ | async)">

@@ -1,6 +1,7 @@
 <div>
     <ng-container *ngIf="!!gamesList else loading">
-        <app-games-list-item *ngFor="let game of gamesList" [game]="game" class="m-1"></app-games-list-item>
+        <app-games-list-item *ngFor="let game of gamesList | slice: (page-1) * pageSize : page * pageSize" [game]="game" class="m-1"></app-games-list-item>
+        <ngb-pagination [(page)]="page" [pageSize]="pageSize" [collectionSize]="gamesList.length"></ngb-pagination>
     </ng-container>
 </div>
 

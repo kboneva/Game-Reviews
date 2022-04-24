@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from 'src/app/auth.service';
-import { IGame, IUser } from 'src/app/core/interfaces';
+import { IUser } from 'src/app/core/interfaces';
 import { ReviewService } from 'src/app/core/services/review.service';
 import { UserService } from 'src/app/core/services/user.service';
 
@@ -14,6 +14,10 @@ export class ProfileComponent implements OnInit {
 
   editing: boolean = false;
   currentUser!: IUser;
+
+  page = 0;
+  pageSize = 3;
+  collectionSize!: number;
 
   defaultAvatar = '/assets/avatar.jpg';
 
@@ -50,10 +54,10 @@ export class ProfileComponent implements OnInit {
     }
   }
 
-  updateProfile(){
+  async updateProfile$(): Promise<void>{
     const username = this.profileForm.value.username;
     const avatar = this.profileForm.value.avatar ? this.profileForm.value.avatar : '/assets/avatar.jpg';
-    this.userService.updateProfile$(this.currentUser._id, username, avatar)
+    await this.userService.updateProfile$(this.currentUser._id, username, avatar)
     .then(() => {
       this.authService.editProfile(username, avatar)
       this.editing = false;
@@ -61,8 +65,8 @@ export class ProfileComponent implements OnInit {
     })
   }
 
-  deleteReview(data: {reviewId: string, reviewRating: number, game: IGame}): void {
-    this.reviewService.deleteReview$(data.reviewId, data.reviewRating, this.currentUser._id, data.game)
+  async deleteReview(data: {reviewId: string, gameId: string}): Promise<void> {
+    await this.reviewService.deleteReview$(data.reviewId, data.gameId, this.currentUser._id)
     .then(() => {
       this.ngOnInit();
     })

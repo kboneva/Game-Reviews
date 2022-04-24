@@ -17,8 +17,7 @@ export class ReviewService {
     return this.http.get<IReview>(`${environment.firebase.databaseURL}/reviews/${_id}.json`);
   }
 
-  async submitReview$(reviewData: {rating: number, text: string}, game: IGame, userId: string): Promise<void> {
-    const newAverage = !!game.reviews ? (game.average * game.reviews.length + reviewData.rating) / (game.reviews.length + 1) : reviewData.rating;
+  async submitReview$(reviewData: {rating: number, text: string}, gameId: string, userId: string): Promise<void> {
 
     const reviewId = push(child(ref(this.db), 'reviews')).key;
 
@@ -27,7 +26,7 @@ export class ReviewService {
       rating: reviewData.rating,
       text: reviewData.text,
       userId: userId,
-      gameId: game._id,
+      gameId: gameId,
       postedAt: formatDate(Date.now(), 'YYYY-MM-dd', 'en')
     }
     
@@ -35,8 +34,7 @@ export class ReviewService {
     const updates: any = {};
     updates[`/reviews/${reviewId}`] = review;
     updates[`/users/${userId}/reviews/${reviewId}`] = true;
-    updates[`/games/${game._id}/reviews/${reviewId}`] = true;
-    updates[`/games/${game._id}/average`] = newAverage;
+    updates[`/games/${gameId}/reviews/${reviewId}`] = true;
 
     await update(ref(this.db), updates)
     .then(() => {
@@ -50,14 +48,12 @@ export class ReviewService {
     });
   }
 
-  async deleteReview$(reviewId: string, reviewRating: number, userId: string, game: IGame): Promise<void> {
-    const newAverage = game.reviews.length == 1 ? 0 : (game.average * game.reviews.length - reviewRating) / (game.reviews.length - 1);
+  async deleteReview$(reviewId: string, gameId: string, userId: string): Promise<void> {
 
     const updates: any = {};
     updates[`/reviews/${reviewId}`] = null;
     updates[`/users/${userId}/reviews/${reviewId}`] = null;
-    updates[`/games/${game._id}/reviews/${reviewId}`] = null;
-    updates[`/games/${game._id}/average`] = newAverage;
+    updates[`/games/${gameId}/reviews/${reviewId}`] = null;
 
     await update(ref(this.db), updates)
     .then(() => {
@@ -71,16 +67,14 @@ export class ReviewService {
     });
   }
 
-  async updateReview$(reviewId: string, formData: {rating: number, text: string}, game: IGame, oldRating: number): Promise<void> {
-    const newAverage = (game.average * game.reviews.length - oldRating + formData.rating) / game.reviews.length;
+  async updateReview$(reviewId: string, formData: {rating: number, text: string}): Promise<void> {
 
     const updates: any = {};
     updates[`/reviews/${reviewId}/rating`] = formData.rating;
     updates[`/reviews/${reviewId}/text`] = formData.text;
-    updates[`/games/${game._id}/average`] = newAverage;
 
     await update(ref(this.db), updates)
-    .then(() => {
+    .then(async () => {
       this.notifService.notify({
         message:"Updated review",
         type: NotificationType.Success
