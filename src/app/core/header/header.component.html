@@ -1,17 +1,17 @@
 <header>
-    <nav class="navbar navbar-light">
+    <nav class="navbar navbar-dark">
         <div class="wrapper navbar-nav">
             <a class="navbar-brand" routerLink="/home">Gaming Reviews</a>
-            <a class="nav-item nav-link active" routerLink="/games/catalog">Catalog</a>
+            <a class="nav-item nav-link active white" routerLink="/games/catalog">Catalog</a>
         </div>
         <div class="wrapper navbar-nav">
             <ng-container *ngIf="!(isLogged$ | async)">
-                <a class="nav-item nav-link active" routerLink="/user/login">Log in</a>
-                <a class="nav-item nav-link active" routerLink="/user/register">Register</a>
+                <a class="nav-item nav-link active white" routerLink="/user/login">Log in</a>
+                <a class="nav-item nav-link active white" routerLink="/user/register">Register</a>
             </ng-container>
             <ng-container *ngIf="(isLogged$ | async)">
-                <a class="nav-item nav-link active" routerLink="/user/profile">Profile</a>
-                <a class="nav-item nav-link active" (click)="logout()">Logout</a>
+                <a class="nav-item nav-link active white" routerLink="/user/profile">Profile</a>
+                <a class="nav-item nav-link active white" (click)="logout()">Logout</a>
             </ng-container>
         </div>
     </nav>

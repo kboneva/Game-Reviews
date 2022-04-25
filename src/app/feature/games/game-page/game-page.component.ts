@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { IGame } from 'src/app/core/interfaces';
 import { AuthService } from 'src/app/auth.service';
 import { GameService } from 'src/app/core/services/game.service';
@@ -24,13 +24,15 @@ export class GamePageComponent implements OnInit {
   collectionSize!: number;
 
   isLogged$ = this.authService.isLogged$
+  currentRole$ = this.authService.currentRole$
 
   reviewForm: FormGroup = this.formBuilder.group({
     "rating": [this.rating, { validators: [Validators.required, Validators.max(10)], updateOn: 'change'}],
     "text": [this.text, { validators: [Validators.maxLength(500)], updateOn: 'change'}]
   })
 
-  constructor(private activatedRoute: ActivatedRoute, private gameService: GameService, private authService: AuthService, private reviewService: ReviewService, private formBuilder: FormBuilder) { }
+  constructor(private activatedRoute: ActivatedRoute, private gameService: GameService, private authService: AuthService, 
+    private reviewService: ReviewService, private formBuilder: FormBuilder, private router: Router) { }
 
   ngOnInit(): void {
     this.activatedRoute.params.subscribe(async params => {
@@ -48,6 +50,7 @@ export class GamePageComponent implements OnInit {
       }
     })
   }
+
 
   submitReview(): void {
     const data = {rating: this.reviewForm.value.rating, text: this.reviewForm.value.text}
@@ -81,6 +84,22 @@ export class GamePageComponent implements OnInit {
   addReviewToggle(): void {
     this.addReviewShow = !this.addReviewShow;
   }
+
+
+  updateGame(gameForm: {title: string, description: string, developer: string, genre: string, releaseDate: string}) {
+    this.gameService.updateGame$(this.gameId, gameForm)
+    .then(() => {
+      this.initialize();
+    })
+  }
+
+  deleteGame(){
+    this.gameService.deleteGame$(this.gameId)
+    .then(() => {
+      this.router.navigate(['/games/catalog']);
+    })
+  }
+
 
   validation(property: string, validator: string): boolean {
     return this.reviewForm.controls[property].errors?.[validator];

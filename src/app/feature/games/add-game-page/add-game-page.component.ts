@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { GameService } from 'src/app/core/services/game.service';
 
 @Component({
@@ -17,13 +18,16 @@ export class AddGamePageComponent implements OnInit {
     "releaseDate": [null, { validators: [Validators.required, Validators.pattern(/\d{4}-\d{2}-\d{2}/)], updateOn: 'change'}],
   })
 
-  constructor(private gameService: GameService, private formBuilder: FormBuilder) { }
+  constructor(private gameService: GameService, private formBuilder: FormBuilder, private router: Router) { }
 
   ngOnInit(): void {
   }
 
   addGame(): void {
     this.gameService.addGame$(this.gameForm.value)
+    .then(() => {
+      this.router.navigate(['/games/catalog']);
+    })
   }
 
   showError(property: string): boolean {

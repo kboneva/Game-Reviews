@@ -15,19 +15,21 @@
 .average-rating {
     display: block;
     font-size: 20px;
+    line-height: 30px;
     text-align: center;
     width: 35px;
     height: 35px;
-    border-radius: 5px;
+    border-radius: 20px;
+    border: 1px solid gray;
     margin-bottom: 0.5rem;
 }
 
 .positive {
-    background-color: green;
-    color: white;
+    color: green;
+    border-color: green;
 }
 
 .negative {
-    background-color: red;
-    color: white;
+    color: red;
+    border-color: red;
 }

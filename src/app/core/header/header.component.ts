@@ -10,7 +10,6 @@ export class HeaderComponent implements OnInit {
 
   constructor(private authService: AuthService) { }
 
-  currentUser$ = this.authService.currentUser$;
   isLogged$ = this.authService.isLogged$;
 
   ngOnInit(): void {

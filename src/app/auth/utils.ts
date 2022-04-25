@@ -16,6 +16,13 @@ export function checkPasswords (password: AbstractControl) {
     return validtorFn;
   }
 
+export function processSuccess(message: string, notifService: NotificationService) {
+  notifService.notify({
+    message: message,
+    type: NotificationType.Success
+  })
+}
+
 export function processError(err: any, notifService: NotificationService) {
   if (!err.code) {
     return null;

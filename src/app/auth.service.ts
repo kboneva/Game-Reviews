@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
-import { Auth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, updateProfile, User } from '@angular/fire/auth';
+import { Auth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, updateEmail, updatePassword, updateProfile, User } from '@angular/fire/auth';
 import { Database, ref, set } from '@angular/fire/database';
 import { Router } from '@angular/router';
 import { BehaviorSubject, map } from 'rxjs';
-import { processError } from './auth/utils';
+import { processError, processSuccess } from './auth/utils';
 import { NotificationService, NotificationType } from './core/services/notification.service';
 import { UserService } from './core/services/user.service';
 
@@ -25,8 +25,6 @@ export class AuthService {
     this.authStateListener();
   }
 
-  // TODO admin role, can add games !!
-
   authStateListener() {
     this.auth.onAuthStateChanged(user => {
       if (user) {
@@ -42,33 +40,7 @@ export class AuthService {
     });
   }
 
-  editProfile(username: string, avatar: string) {
-    this.currentUser$.subscribe(user => {
-      updateProfile(user, {displayName: username, photoURL: avatar})
-      .then(() => {
-        this.notifService.notify({
-          message:"Successfully updated your account!",
-          type: NotificationType.Success
-        })
-      })
-      .catch(err => {
-        processError(err, this.notifService);
-      });
-    })
-  }
-
-  // changeEmail(email: string) {
-  //   this.currentUser$.subscribe(user => {
-  //     updateEmail(user, email);
-  //   })
-  // }
-  // // TODO if time left: edit profile: change email and password(?)
-  // changePassword(password: string) {
-  //   this.currentUser$.subscribe(user => {
-  //     updatePassword(user, password);
-  //   })
-  // }
-
+  
   register(userData: {username: string, email: string, password: string, repeatPassword: string}): void {
     createUserWithEmailAndPassword(this.auth, userData.email, userData.password)
     .then(userCredential => {
@@ -84,10 +56,7 @@ export class AuthService {
       })
     })
     .then(() => {
-      this.notifService.notify({
-        message:"Successfully created an account!",
-        type: NotificationType.Success
-      })
+      processSuccess("Successfully created an account!", this.notifService);
       this.router.navigate(["/home"]);
     })
     .catch(err => {
@@ -99,10 +68,7 @@ export class AuthService {
   login(userData: {email: string, password: string}): void {
     signInWithEmailAndPassword(this.auth, userData.email, userData.password)
     .then(() => {
-      this.notifService.notify({
-        message:"Welcome back!",
-        type: NotificationType.Success
-      })
+      processSuccess("Welcome back!", this.notifService);
       this.router.navigate(["/home"]);
     })
     .catch(err => {
@@ -114,14 +80,38 @@ export class AuthService {
   logout(): void {
     signOut(this.auth)
     .then(() => {
-      this.notifService.notify({
-        message:"We hope to see you again!",
-        type: NotificationType.Success
-      })
+      processSuccess("We hope to see you again!", this.notifService);
       this.router.navigate(["/user/login"]);
     })
     .catch(err => {
       processError(err, this.notifService);
     });
+  }
+
+
+  editProfile(username: string, avatar: string) {
+    this.currentUser$.subscribe(user => {
+      updateProfile(user, {displayName: username, photoURL: avatar})
+      .then(() => {
+        processSuccess("Successfully updated your account!", this.notifService);
+      })
+      .catch(err => {
+        processError(err, this.notifService);
+      });
+    })
+  }
+
+
+  // TODO if time left: edit profile: change email and password(?)
+  changeEmail(email: string) {
+    this.currentUser$.subscribe(user => {
+      updateEmail(user, email);
+    })
+  }
+  
+  changePassword(password: string) {
+    this.currentUser$.subscribe(user => {
+      updatePassword(user, password);
+    })
   }
 }

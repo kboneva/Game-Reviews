@@ -64,8 +64,7 @@ export class ReviewComponent implements OnInit {
   }
 
   async updateReview$(): Promise<void>{
-    const formData = {rating: this.reviewForm.value.rating, text: this.reviewForm.value.text};
-    await this.reviewService.updateReview$(this.review._id, formData)
+    await this.reviewService.updateReview$(this.review._id, this.reviewForm.value)
     .then(() => {
       this.updateItem.emit();
       this.editing = false;

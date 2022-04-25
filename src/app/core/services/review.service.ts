@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { child, Database, push, ref, update } from '@angular/fire/database';
 import { Observable } from 'rxjs';
-import { processError } from 'src/app/auth/utils';
+import { processError, processSuccess } from 'src/app/auth/utils';
 import { environment } from 'src/environments/environment';
 import { IGame, IReview } from '../interfaces';
 import { NotificationService, NotificationType } from './notification.service';
@@ -38,10 +38,7 @@ export class ReviewService {
 
     await update(ref(this.db), updates)
     .then(() => {
-      this.notifService.notify({
-        message:"Submitted review",
-        type: NotificationType.Success
-      })
+      processSuccess("Submitted review", this.notifService);
     })
     .catch(err => {
       processError(err, this.notifService);
@@ -57,10 +54,7 @@ export class ReviewService {
 
     await update(ref(this.db), updates)
     .then(() => {
-      this.notifService.notify({
-        message:"Deleted review",
-        type: NotificationType.Success
-      })
+      processSuccess("Deleted review", this.notifService);
     })
     .catch(err => {
       processError(err, this.notifService);
@@ -75,10 +69,7 @@ export class ReviewService {
 
     await update(ref(this.db), updates)
     .then(async () => {
-      this.notifService.notify({
-        message:"Updated review",
-        type: NotificationType.Success
-      })
+      processSuccess("Updated review", this.notifService);
     })
     .catch(err => {
       processError(err, this.notifService);

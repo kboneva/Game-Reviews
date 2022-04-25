@@ -41,8 +41,8 @@
             <input formControlName="avatar" class="form-control {{showError('avatar') ?  'is-invalid' : ''}}" type="text" name="avatar" id="avatar" placeholder="https://www.example.com/your/avatar">
 
 
-            <button class="btn btn-primary m-3" [disabled]="this.profileForm.invalid">Update</button>
-            <button class="btn btn-danger m-3" (click)="editProfileToggle()">Cancel</button>
+            <button class="btn btn-outline-primary m-3" [disabled]="this.profileForm.invalid">Update</button>
+            <button class="btn btn-outline-danger m-3" (click)="editProfileToggle()">Cancel</button>
             
         </fieldset>
     </form>

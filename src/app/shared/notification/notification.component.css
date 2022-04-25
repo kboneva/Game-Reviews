@@ -8,14 +8,16 @@
 
 .notification {
     padding: 0.5rem;
+    border: 1px solid gray;
     border-radius: 5px;
-    color: white;
 }
 
 .positive {
-    background-color: green;
+    color: green;
+    border-color: green;
 }
 
 .negative {
-    background-color: red;
+    color: red;
+    border-color: red;
 }

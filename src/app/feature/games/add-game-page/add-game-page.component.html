@@ -34,7 +34,7 @@
             </ng-container>
 
 
-            <label for="releaseDate">Release Date</label>
+            <label for="releaseDate"></label>
             <input formControlName="releaseDate" class="form-control {{showError('releaseDate') ?  'is-invalid' : ''}}" type="text" name="releaseDate" id="releaseDate" placeholder="2022-02-20">
             <ng-container *ngIf="showError('developer')">
                 <p class="invalid-feedback" *ngIf="validation('developer', 'required')">Field is required!</p>

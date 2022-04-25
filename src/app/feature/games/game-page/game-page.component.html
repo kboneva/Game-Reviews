@@ -1,5 +1,5 @@
 <ng-container *ngIf="!!game else loading">
-    <app-game [game]="game"></app-game>
+    <app-game [game]="game" [isAdmin]="(currentRole$ | async) === 'admin'" (updateGame)="updateGame($event)" (deleteGame)="deleteGame()"></app-game>
 
     <ng-container *ngIf="!!game.reviews else noReviews">
         <app-review (removeItem)="deleteReview($event)" (updateItem)="updateAverage()" *ngFor="let review of game.reviews | slice: (page-1) * pageSize : page * pageSize" [reviewId]="review"></app-review>
@@ -7,7 +7,7 @@
     </ng-container>
     
     <ng-container *ngIf="(isLogged$ | async)">
-        <button class="btn btn-primary m-3 {{!addReviewShow ? '' : 'd-none'}}" (click)="addReviewToggle()">Add review</button>
+        <button class="btn btn-outline-primary m-3 {{!addReviewShow ? '' : 'd-none'}}" (click)="addReviewToggle()">Add review</button>
         <ng-container *ngIf="!addReviewShow else addReview"></ng-container>
     </ng-container>
 </ng-container>
@@ -40,8 +40,8 @@
                 </ng-container>
     
                 
-                <button class="btn btn-primary m-3" [disabled]="this.reviewForm.invalid">Submit</button>
-                <button class="btn btn-danger m-3" (click)="addReviewToggle()">Cancel</button>
+                <button class="btn btn-outline-primary m-3" [disabled]="this.reviewForm.invalid">Submit</button>
+                <button class="btn btn-outline-danger m-3" (click)="addReviewToggle()">Cancel</button>
     
             </fieldset>
         </form>

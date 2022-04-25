@@ -1,12 +1,15 @@
 :host {
-    display: block;
-    background-color: aqua;
+    margin-top: auto;
+    background-color: #39414e ;
+    color: lightgray;
 }
 
 footer {
     max-width: 1000px;
-    margin: auto;
-    padding: 10px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 2rem;
+    text-align: center;
 }
 
 i {
@@ -17,6 +20,6 @@ i {
     display: flex;
     flex-direction: row;
     gap: 1rem;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
 }
