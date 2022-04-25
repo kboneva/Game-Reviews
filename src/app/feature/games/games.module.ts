@@ -8,6 +8,7 @@ import { GamesRoutingModule } from './games-routing.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { NgbPaginationModule, NgbRatingModule } from '@ng-bootstrap/ng-bootstrap';
 import { SharedModule } from 'src/app/shared/shared.module';
+import { AddGamePageComponent } from './add-game-page/add-game-page.component';
 
 
 
@@ -16,7 +17,8 @@ import { SharedModule } from 'src/app/shared/shared.module';
     GameComponent,
     GamesListItemComponent,
     AllGamesPageComponent,
-    GamePageComponent
+    GamePageComponent,
+    AddGamePageComponent
   ],
   imports: [
     CommonModule,

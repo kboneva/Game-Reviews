@@ -1,4 +1,8 @@
 <div>
+    <div class="wrapper">
+        <h2 class="card-title">Catalog</h2>
+        <button *ngIf="(currentRole$ | async) == 'admin'" class="btn btn-outline-success m-3" (click)="addGame()">Add game</button>
+    </div>
     <ng-container *ngIf="!!gamesList else loading">
         <app-games-list-item *ngFor="let game of gamesList | slice: (page-1) * pageSize : page * pageSize" [game]="game" class="m-1"></app-games-list-item>
         <ngb-pagination [(page)]="page" [pageSize]="pageSize" [collectionSize]="gamesList.length"></ngb-pagination>

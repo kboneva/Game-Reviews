@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 import { processError } from 'src/app/auth/utils';
 import { environment } from 'src/environments/environment';
 import { IUser } from '../interfaces/user';
-import { NotificationService, NotificationType } from './notification.service';
+import { NotificationService } from './notification.service';
 
 @Injectable()
 export class UserService {
@@ -14,6 +14,10 @@ export class UserService {
 
   loadUser$(_id: string): Observable<IUser>{
     return this.http.get<IUser>(`${environment.firebase.databaseURL}/users/${_id}.json`)
+  }
+
+  getUserRole$(_id: string): Observable<string>{
+    return this.http.get<string>(`${environment.firebase.databaseURL}/users/${_id}/role.json`)
   }
 
   async updateProfile$(userId: string, username: string, avatar: string): Promise<void>{

@@ -3,13 +3,15 @@ import { HttpClient } from '@angular/common/http'
 import { map, Observable } from 'rxjs';
 import { IGame } from '../interfaces';
 import { environment } from 'src/environments/environment';
-import { Database, equalTo, onValue, query, ref, set } from '@angular/fire/database';
+import { child, Database, equalTo, onValue, push, query, ref, set } from '@angular/fire/database';
 import { orderByChild } from '@firebase/database';
+import { NotificationService, NotificationType } from './notification.service';
+import { processError } from 'src/app/auth/utils';
 
 @Injectable()
 export class GameService {
 
-  constructor(private http: HttpClient, private db: Database) { }
+  constructor(private http: HttpClient, private db: Database, private notifService: NotificationService) { }
 
   loadGames$(): Observable<IGame[]> {
     return this.http.get<IGame[]>(`${environment.firebase.databaseURL}/games.json`);
@@ -44,5 +46,30 @@ export class GameService {
 
     await set(ref(this.db, 'games/' + _id + '/average'), average);
     return average;
+  }
+
+  async addGame$(data: {title: string, description: string, developer: string, genre: string, releaseDate: string}){
+    const gameId = push(child(ref(this.db), 'games')).key;
+
+    const game = {
+      _id: gameId,
+      title: data.title,
+      description: data.description,
+      developer: data.developer,
+      genre: data.genre.split(", "),
+      releaseDate: data.releaseDate,
+      average: 0
+    }
+
+    await set(ref(this.db, 'games/' + gameId), game)
+    .then(() => {
+      this.notifService.notify({
+        message:"Added game",
+        type: NotificationType.Success
+      })
+    })
+    .catch(err => {
+      processError(err, this.notifService);
+    });;
   }
 }

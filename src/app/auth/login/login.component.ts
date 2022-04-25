@@ -9,8 +9,6 @@ import { AuthService } from 'src/app/auth.service';
 })
 export class LoginComponent implements OnInit {
 
-  errorMessage: string = ''
-
   loginForm: FormGroup = this.formBuilder.group({
     "email": [null, { validators: [Validators.required, Validators.email], updateOn: 'change'}],
     "password": [null, { validators: [Validators.required, Validators.minLength(5)], updateOn: 'change'}]
@@ -22,7 +20,6 @@ export class LoginComponent implements OnInit {
   }
 
   login(): void {
-    this.errorMessage = '';
     this.authService.login(this.loginForm.value)
   }
 

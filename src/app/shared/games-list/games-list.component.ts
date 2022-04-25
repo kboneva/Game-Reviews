@@ -12,5 +12,5 @@ export class GamesListComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  //TODO implement games-list
+  //TODO if time left: implement games-list
 }

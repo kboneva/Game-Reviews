@@ -1,5 +1,5 @@
 <div class="container">
-    <form class="login" [formGroup]="loginForm" (ngSubmit)="login()">
+    <form [formGroup]="loginForm" (ngSubmit)="login()">
         <fieldset>
 
             <div class="m-3">
@@ -7,31 +7,24 @@
                 <h5>Don't have an account? <a routerLink="/user/register">Sign up</a></h5>
             </div>
 
-            <div class="email">
-                <label for="email"></label>
-                <input formControlName="email" class="form-control {{showError('email') ?  'is-invalid' : ''}}" type="email" name="email" id="email" placeholder="example@email.com">
-                <ng-container *ngIf="showError('email')">
-                    <p class="invalid-feedback" *ngIf="validation('email', 'required')">Email is required!</p>
-                    <p class="invalid-feedback" *ngIf="validation('email', 'email')">Invalid email!</p>
-                </ng-container>
-            </div>
 
-            <div class="password">
-                <label for="password"></label>
-                <input formControlName="password" class="form-control {{showError('password') ?  'is-invalid' : ''}}" type="password" name="password" id="password" placeholder="**********">
-                <ng-container *ngIf="showError('password')">
-                    <p class="invalid-feedback" *ngIf="validation('password', 'required')">Password is required!</p>
-                    <p class="invalid-feedback" *ngIf="validation('password', 'minlength')">Password is too short!</p>
-                </ng-container>
-            </div>
+            <label for="email"></label>
+            <input formControlName="email" class="form-control {{showError('email') ?  'is-invalid' : ''}}" type="email" name="email" id="email" placeholder="example@email.com">
+            <ng-container *ngIf="showError('email')">
+                <p class="invalid-feedback" *ngIf="validation('email', 'required')">Email is required!</p>
+                <p class="invalid-feedback" *ngIf="validation('email', 'email')">Invalid email!</p>
+            </ng-container>
 
-            <div class="errorMessage">
-                <p *ngIf="errorMessage" class="error">{{errorMessage}}</p>
-            </div>
 
-            <div class="button">
-                <button class="btn btn-success m-3" [disabled]="this.loginForm.invalid">Log In</button>
-            </div>
+            <label for="password"></label>
+            <input formControlName="password" class="form-control {{showError('password') ?  'is-invalid' : ''}}" type="password" name="password" id="password" placeholder="**********">
+            <ng-container *ngIf="showError('password')">
+                <p class="invalid-feedback" *ngIf="validation('password', 'required')">Password is required!</p>
+                <p class="invalid-feedback" *ngIf="validation('password', 'minlength')">Password is too short!</p>
+            </ng-container>
+
+
+            <button class="btn btn-success m-3" [disabled]="this.loginForm.invalid">Log In</button>
 
         </fieldset>
     </form>

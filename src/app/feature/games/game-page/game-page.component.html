@@ -22,30 +22,26 @@
 
 <ng-template #addReview>
     <div class="card card-body">
-        <form class="add-review" [formGroup]="reviewForm" (ngSubmit)="submitReview()">
+        <form [formGroup]="reviewForm" (ngSubmit)="submitReview()">
             <fieldset>
                 
-                <div class="rating">
-                    <h5 class="card-title"><b class="filled">{{rating}}</b> stars</h5>
-                    <ngb-rating formControlName="rating" [(rate)]="rating">
-                        <ng-template let-fill="fill">
-                            <span class="star" [class.filled]="fill === 100">&#9733;</span>
-                          </ng-template>
-                    </ngb-rating>
-                </div>
+                <h5 class="card-title"><b class="filled">{{rating}}</b> stars</h5>
+                <ngb-rating formControlName="rating" [(rate)]="rating">
+                    <ng-template let-fill="fill">
+                        <span class="star" [class.filled]="fill === 100">&#9733;</span>
+                      </ng-template>
+                </ngb-rating>
+
     
-                <div class="text">
-                    <label for="text"></label>
-                    <textarea formControlName="text" class="form-control {{showError('text') ?  'is-invalid' : ''}}" name="text" id="text" placeholder="Your critique here.">{{text}}</textarea>
-                    <ng-container *ngIf="showError('text')">
-                        <p class="invalid-feedback" *ngIf="validation('text', 'maxLength')">Field is past the max length treshold!</p>
-                    </ng-container>
-                </div>
+                <label for="text"></label>
+                <textarea formControlName="text" class="form-control {{showError('text') ?  'is-invalid' : ''}}" name="text" id="text" placeholder="Your critique here.">{{text}}</textarea>
+                <ng-container *ngIf="showError('text')">
+                    <p class="invalid-feedback" *ngIf="validation('text', 'maxLength')">Field is past the max length treshold!</p>
+                </ng-container>
     
-                <div class="button">
-                    <button class="btn btn-primary m-3" [disabled]="this.reviewForm.invalid">Submit</button>
-                    <button class="btn btn-danger m-3" (click)="addReviewToggle()">Cancel</button>
-                </div>
+                
+                <button class="btn btn-primary m-3" [disabled]="this.reviewForm.invalid">Submit</button>
+                <button class="btn btn-danger m-3" (click)="addReviewToggle()">Cancel</button>
     
             </fieldset>
         </form>

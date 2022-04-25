@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { AuthService } from 'src/app/auth.service';
 import { IGame } from 'src/app/core/interfaces';
 import { GameService } from 'src/app/core/services/game.service';
 
@@ -15,25 +17,26 @@ export class AllGamesPageComponent implements OnInit {
   pageSize = 4;
   collectionSize!: number;  
 
-  constructor(private gameServices: GameService) { }
+  currentRole$ = this.authService.currentRole$
+
+  constructor(private gameServices: GameService, private authService: AuthService, private router: Router) { }
 
   ngOnInit(): void {
     this.gameServices.loadGames$().subscribe(gamesList => {
-      const keys = Object.keys(gamesList);
-      const values = Object.values(gamesList);
-      const items = [];
-      for (let i = 0; i < keys.length; i++) {
-        items[i] = {
-          _id: keys[i],
-          developer:values[i].developer,
-          description: values[i].description,
-          releaseDate: values[i].releaseDate,
-          genre: values[i].genre, 
-          reviews: values[i].reviews, 
-          title: values[i].title,
-          average: values[i].average
-        }
-      }
-      this.gamesList = items;
-    }) }
+      const games = Object.values(gamesList);
+      this.gamesList = this.sortByDate(games);
+    }) 
+  }
+
+  sortByDate(games: IGame[]){
+    return games.sort((a, b) => new Date(b.releaseDate).getTime() - new Date(a.releaseDate).getTime());
+  }
+
+  sortByRating(games: IGame[]){
+    return games.sort((a, b) => b.average - a.average);
+  }
+
+  addGame(): void{
+    this.router.navigate(['/games/submit']);
+  }
 }

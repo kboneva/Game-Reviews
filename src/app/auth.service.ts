@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
-import { Auth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, updateProfile, User, updateEmail, updatePassword } from '@angular/fire/auth';
+import { Auth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, updateProfile, User } from '@angular/fire/auth';
 import { Database, ref, set } from '@angular/fire/database';
 import { Router } from '@angular/router';
 import { BehaviorSubject, map } from 'rxjs';
 import { processError } from './auth/utils';
 import { NotificationService, NotificationType } from './core/services/notification.service';
+import { UserService } from './core/services/user.service';
 
 @Injectable({
   providedIn: 'root'
@@ -12,12 +13,15 @@ import { NotificationService, NotificationType } from './core/services/notificat
 export class AuthService {
 
   private _currentUser = new BehaviorSubject<User>(undefined!);
-
+  private _currentRole = new BehaviorSubject<string>(undefined!);
+  
   currentUser$ = this._currentUser.asObservable();
+  currentRole$ = this._currentRole.asObservable();
+
   currentId$ = this.currentUser$.pipe(map(user => user.uid));
   isLogged$ = this.currentUser$.pipe(map(user => !!user));
 
-  constructor(private auth: Auth, private router: Router, private db: Database, private notifService: NotificationService) { 
+  constructor(private auth: Auth, private router: Router, private db: Database, private notifService: NotificationService, private userService: UserService) { 
     this.authStateListener();
   }
 
@@ -27,9 +31,13 @@ export class AuthService {
     this.auth.onAuthStateChanged(user => {
       if (user) {
         this._currentUser.next(user);
+        this.userService.getUserRole$(user.uid).subscribe(role => {
+          this._currentRole.next(role);
+        })
       } 
       else {
         this._currentUser.next(undefined!);
+        this._currentRole.next(undefined!);
       }
     });
   }
@@ -54,7 +62,7 @@ export class AuthService {
   //     updateEmail(user, email);
   //   })
   // }
-  // // TODO edit profile: change email and password(?)
+  // // TODO if time left: edit profile: change email and password(?)
   // changePassword(password: string) {
   //   this.currentUser$.subscribe(user => {
   //     updatePassword(user, password);
@@ -71,7 +79,8 @@ export class AuthService {
         _id: user.uid,
         avatar: avatarUrl,
         username: userData.username,
-        reviews: []
+        reviews: [],
+        role: "user"
       })
     })
     .then(() => {

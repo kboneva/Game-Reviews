@@ -1,0 +1,49 @@
+<div class="container">
+    <form [formGroup]="gameForm" (ngSubmit)="addGame()">
+        <fieldset>
+
+            <h2 class="m-3">Add new game to the database</h2>
+
+
+            <label for="title"></label>
+            <input formControlName="title" class="form-control {{showError('title') ?  'is-invalid' : ''}}" type="text" name="title" id="title" placeholder="Official title">
+            <ng-container *ngIf="showError('title')">
+                <p class="invalid-feedback" *ngIf="validation('title', 'required')">Field is required!</p>
+            </ng-container>
+
+
+            <label for="description"></label>
+            <textarea formControlName="description" class="form-control {{showError('description') ?  'is-invalid' : ''}}" name="description" id="description" placeholder="Description of the game."></textarea>
+            <ng-container *ngIf="showError('description')">
+                <p class="invalid-feedback" *ngIf="validation('description', 'required')">Field is required!</p>
+            </ng-container>
+
+
+            <label for="developer"></label>
+            <input formControlName="developer" class="form-control {{showError('developer') ?  'is-invalid' : ''}}" type="text" name="developer" id="developer" placeholder="Developer">
+            <ng-container *ngIf="showError('developer')">
+                <p class="invalid-feedback" *ngIf="validation('developer', 'required')">Field is required!</p>
+            </ng-container>
+
+
+            <label for="genre"></label>
+            <input formControlName="genre" class="form-control {{showError('genre') ?  'is-invalid' : ''}}" type="text" name="genre" id="genre" placeholder="Action Adventure, Role-Playing, ...">
+            <ng-container *ngIf="showError('genre')">
+                <p class="invalid-feedback" *ngIf="validation('genre', 'required')">Field is required!</p>
+                <p class="invalid-feedback" *ngIf="validation('genre', 'pattern')">Invalid input!</p>
+            </ng-container>
+
+
+            <label for="releaseDate">Release Date</label>
+            <input formControlName="releaseDate" class="form-control {{showError('releaseDate') ?  'is-invalid' : ''}}" type="text" name="releaseDate" id="releaseDate" placeholder="2022-02-20">
+            <ng-container *ngIf="showError('developer')">
+                <p class="invalid-feedback" *ngIf="validation('developer', 'required')">Field is required!</p>
+                <p class="invalid-feedback" *ngIf="validation('developer', 'pattern')">Invalid input!</p>
+            </ng-container>
+
+
+            <button class="btn btn-success m-3" [disabled]="this.gameForm.invalid">Add Game</button>
+
+        </fieldset>
+    </form>
+</div>
