@@ -32,7 +32,7 @@ export class HomePageComponent implements OnInit {
   get mostDiscussed() {
     return Object.values(this.games)
     .filter(g => !!g.reviews)
-    .sort((g1, g2) => g2.reviews.length - g1.reviews.length)
+    .sort((g1, g2) => g1.reviews.length - g2.reviews.length)
     .slice(0, 3);
   }
 
