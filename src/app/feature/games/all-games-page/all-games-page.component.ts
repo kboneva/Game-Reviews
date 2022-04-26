@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/auth.service';
 import { IGame } from 'src/app/core/interfaces';
@@ -11,11 +12,15 @@ import { GameService } from 'src/app/core/services/game.service';
 })
 export class AllGamesPageComponent implements OnInit {
 
+  games!: IGame[];
   gamesList!: IGame[];
   
   page = 0;
   pageSize = 4;
-  collectionSize!: number;  
+  collectionSize!: number;
+
+  dropDownForm = new FormControl('');
+  searchForm = new FormControl('');
 
   currentRole$ = this.authService.currentRole$
 
@@ -23,18 +28,32 @@ export class AllGamesPageComponent implements OnInit {
 
   ngOnInit(): void {
     this.gameServices.loadGames$().subscribe(gamesList => {
-      const games = Object.values(gamesList);
-      this.gamesList = this.sortByDate(games);
+      this.gamesList = Object.values(gamesList);
+      this.games = this.gamesList;
+      this.sortByDate();
+
+      this.searchForm.valueChanges.subscribe(searchTerm => {
+        searchTerm = searchTerm.toLowerCase()
+        this.games = this.gamesList.filter(g => g.title.toLowerCase().includes(searchTerm) 
+        || g.developer.toLowerCase().includes(searchTerm) 
+        || g.description.toLowerCase().includes(searchTerm));
+      })
     }) 
   }
 
-  // TODO if time left: sorting/filtering
-  sortByDate(games: IGame[]){
-    return games.sort((a, b) => new Date(b.releaseDate).getTime() - new Date(a.releaseDate).getTime());
+  sortByDate(){
+    this.games.sort((a, b) => new Date(b.releaseDate).getTime() - new Date(a.releaseDate).getTime());
+    this.gamesList.sort((a, b) => new Date(b.releaseDate).getTime() - new Date(a.releaseDate).getTime());
   }
 
-  sortByRating(games: IGame[]){
-    return games.sort((a, b) => b.average - a.average);
+  sortByRating(){
+    this.games.sort((a, b) => b.average - a.average);
+    this.gamesList.sort((a, b) => b.average - a.average);
+  }
+
+  sortByName(){
+    this.games.sort((a, b) => a.title.localeCompare(b.title));
+    this.gamesList.sort((a, b) => a.title.localeCompare(b.title));
   }
 
   addGame(): void{

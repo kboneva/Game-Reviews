@@ -4,7 +4,6 @@ import { ReviewComponent } from './review/review.component';
 import { NgbRatingModule } from '@ng-bootstrap/ng-bootstrap';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { GamesListComponent } from './games-list/games-list.component';
 import { NotificationComponent } from './notification/notification.component';
 
 
@@ -12,7 +11,6 @@ import { NotificationComponent } from './notification/notification.component';
 @NgModule({
   declarations: [
     ReviewComponent,
-    GamesListComponent,
     NotificationComponent
   ],
   imports: [
@@ -23,7 +21,6 @@ import { NotificationComponent } from './notification/notification.component';
   ],
   exports: [
     ReviewComponent,
-    GamesListComponent,
     NotificationComponent
   ]
 })

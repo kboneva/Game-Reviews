@@ -34,7 +34,7 @@
 
 
 <ng-template #editMode>
-    <div class="card card-body mb-3">
+    <div class="card card-body container">
         <form [formGroup]="gameForm" (ngSubmit)="sendUpdate()">
             <fieldset>
                 <label for="title"></label>
@@ -62,7 +62,6 @@
                 <input formControlName="genre" class="form-control {{showError('genre') ?  'is-invalid' : ''}}" type="text" name="genre" id="genre" placeholder="Action Adventure, Role-Playing, ...">
                 <ng-container *ngIf="showError('genre')">
                     <p class="invalid-feedback" *ngIf="validation('genre', 'required')">Field is required!</p>
-                    <p class="invalid-feedback" *ngIf="validation('genre', 'pattern')">Invalid input!</p>
                 </ng-container>
     
     

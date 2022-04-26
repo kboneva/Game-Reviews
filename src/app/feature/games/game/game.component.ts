@@ -22,7 +22,7 @@ export class GameComponent implements OnInit {
     "title": [null, { validators: [Validators.required], updateOn: 'change'}],
     "description": [null, { validators: [Validators.required], updateOn: 'change'}],
     "developer": [null, { validators: [Validators.required], updateOn: 'change'}],
-    "genre": [null, { validators: [Validators.required, Validators.pattern(/[a-zA-Z0-9- ]+(, [a-zA-Z0-9- ]+)*/)], updateOn: 'change'}],
+    "genre": [null, { validators: [Validators.required], updateOn: 'change'}],
     "releaseDate": [null, { validators: [Validators.required, Validators.pattern(/\d{4}-\d{2}-\d{2}/)], updateOn: 'change'}],
     "image": [null, {validators: [Validators.required], updateOn: 'change'}]
   })

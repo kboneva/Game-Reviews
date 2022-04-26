@@ -101,8 +101,6 @@ export class AuthService {
     })
   }
 
-
-  // TODO if time left: fix reauthenticate before changing email/password
   changeCredentials(newEmail: string, oldPassword: string, newPassword: string) {
     const currentEmail = this.auth.currentUser?.email;
     signOut(this.auth)

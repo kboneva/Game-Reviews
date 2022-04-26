@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http'
-import { map, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { IGame } from '../interfaces';
 import { environment } from 'src/environments/environment';
 import { child, Database, equalTo, onValue, push, query, ref, remove, set, update } from '@angular/fire/database';
 import { orderByChild } from '@firebase/database';
-import { NotificationService, NotificationType } from './notification.service';
+import { NotificationService } from './notification.service';
 import { processError, processSuccess } from 'src/app/auth/utils';
 
 @Injectable()
@@ -47,7 +47,7 @@ export class GameService {
       title: data.title,
       description: data.description,
       developer: data.developer,
-      genre: data.genre.split(", "),
+      genre: data.genre.split(",").map(g => g.trim()),
       releaseDate: data.releaseDate,
       image: data.image,
       average: 0

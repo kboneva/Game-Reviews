@@ -1,17 +1,16 @@
 <div class="column" *ngIf="!!games else loading">
-    <div class="section-one">
+    <div class="section-one mb-5">
         <h4 class="center">Highest rated games</h4>
         <hr>
         <div *ngIf="!!highest else loading" class="wrapper">
             <div *ngFor="let game of highest">
-                <div class="imageBox">
-                    <img src="{{game.image}}" alt="">
-                    <p class="positive">{{game.average | number:'0.0-0'}}</p>
-                    <a [routerLink]="['/games', game._id]" class="game-title">
-                        <p class="card-title">{{game.title}}</p>
-                    </a>
-                </div>
-                
+                <a [routerLink]="['/games', game._id]" class="game-title">
+                    <div class="imageBox">
+                        <img src="{{game.image}}" alt="">
+                        <p class="positive">{{game.average | number:'0.0-0'}}</p>
+                        <p class="card-title absolute-box">{{game.title}}</p>
+                    </div>
+                </a>
             </div>
         </div>
     </div>
@@ -19,7 +18,7 @@
 
     <div class="combined">
         <div class="column col-4">
-            <div class="section-two mb-3">
+            <div class="section-two mb-5">
                 <h4 class="center">Most discussed games</h4>
                 <hr>
                 <div *ngIf="!!mostDiscussed else loading">
@@ -33,7 +32,7 @@
                     </div>
                 </div>
             </div>
-    
+
             <div class="section-three">
                 <h4 class="center">Lowest rated games</h4>
                 <hr>
@@ -67,7 +66,9 @@
                                 <p><small>{{game.description.length > 120 ? (game.description | slice: 0:120) + "..." : game.description}}</small></p>
                             </a>
                         </div>
-                        <div><p class="negative">{{game.average | number:'0.0-0'}}</p></div>
+                        <div *ngIf="game.average > 0">
+                            <p class="{{game.average >=5 ? 'positive' : 'negative'}}">{{(game.average | number:'0.0-0')}}</p>
+                        </div>
                     </div>
                 </div>
             </div>

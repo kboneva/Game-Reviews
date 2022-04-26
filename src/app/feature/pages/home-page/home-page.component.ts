@@ -27,7 +27,7 @@ export class HomePageComponent implements OnInit {
     return Object.values(this.games)
     .filter(g => (new Date().getTime() - new Date(g.releaseDate).getTime()) < 31556952000)
     .sort((g1, g2) => new Date(g2.releaseDate).getTime() - new Date(g1.releaseDate).getTime())
-    .slice(0, 5);
+    .slice(0, 4);
   }
   get mostDiscussed() {
     return Object.values(this.games)

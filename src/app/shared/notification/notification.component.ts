@@ -26,7 +26,6 @@ export class NotificationComponent implements OnInit {
           this.notifService.clear();
         }, 5000);
       }
-      //TODO if time left: chain of notifications
     })
   }
 

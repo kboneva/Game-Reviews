@@ -1,11 +1,20 @@
 <div>
     <div class="wrapper">
         <h2 class="card-title">Catalog</h2>
+        <input [formControl]="searchForm" type="text" placeholder="Search">
+        <div ngbDropdown class="d-inline-block">
+            <button type="button" class="btn btn-outline-primary" id="dropdown" ngbDropdownToggle>Order by</button>
+            <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+              <button ngbDropdownItem (click)="sortByDate()">Date</button>
+              <button ngbDropdownItem (click)="sortByRating()">Rating</button>
+              <button ngbDropdownItem (click)="sortByName()">Name</button>
+            </div>
+          </div>
         <button *ngIf="(currentRole$ | async) == 'admin'" class="btn btn-outline-success m-3" (click)="addGame()">Add game</button>
     </div>
-    <ng-container *ngIf="!!gamesList else loading">
-        <app-games-list-item *ngFor="let game of gamesList | slice: (page-1) * pageSize : page * pageSize" [game]="game" class="m-1"></app-games-list-item>
-        <ngb-pagination [(page)]="page" [pageSize]="pageSize" [collectionSize]="gamesList.length"></ngb-pagination>
+    <ng-container *ngIf="!!games else loading">
+        <app-games-list-item *ngFor="let game of games | slice: (page-1) * pageSize : page * pageSize" [game]="game" class="m-1"></app-games-list-item>
+        <ngb-pagination [(page)]="page" [pageSize]="pageSize" [collectionSize]="games.length"></ngb-pagination>
     </ng-container>
 </div>
 

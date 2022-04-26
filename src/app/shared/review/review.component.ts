@@ -30,7 +30,7 @@ export class ReviewComponent implements OnInit {
 
   reviewForm: FormGroup = this.formBuilder.group({
     "rating": [this.rating, { validators: [Validators.required, Validators.max(10)], updateOn: 'change'}],
-    "text": [this.text, { validators: [Validators.maxLength(500)], updateOn: 'change'}]
+    "text": [this.text, { validators: [Validators.maxLength(1000)], updateOn: 'change'}]
   })
 
   constructor(private reviewService: ReviewService, private userService: UserService, private gameService: GameService, private authService: AuthService, private formBuilder: FormBuilder) { }

@@ -28,7 +28,7 @@ export class GamePageComponent implements OnInit {
 
   reviewForm: FormGroup = this.formBuilder.group({
     "rating": [this.rating, { validators: [Validators.required, Validators.max(10)], updateOn: 'change'}],
-    "text": [this.text, { validators: [Validators.maxLength(500)], updateOn: 'change'}]
+    "text": [this.text, { validators: [Validators.maxLength(1000)], updateOn: 'change'}]
   })
 
   constructor(private activatedRoute: ActivatedRoute, private gameService: GameService, private authService: AuthService, 
@@ -83,6 +83,12 @@ export class GamePageComponent implements OnInit {
 
   addReviewToggle(): void {
     this.addReviewShow = !this.addReviewShow;
+    if(!this.addReviewShow){
+      this.reviewForm.patchValue({
+        "rating": 5,
+        "text": ''
+      })
+    }
   }
 
 
