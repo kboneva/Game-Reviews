@@ -17,9 +17,12 @@
             </div>
             
             <div class="wrapper mb-0">
-                <div *ngIf="!!user else loading">
-                    <p class="text-muted">by {{!!user.username ? user.username : "Anonymous"}}, {{review.postedAt | date: "dd MMM YYYY"}}</p>
-                </div>
+                <ng-container *ngIf="!displayGame else justDate">
+                    <div class="wrapper justify-content-start mb-0" *ngIf="!!user else loading">
+                        <img src='{{user.avatar}}' class="avatar" alt="avatar">
+                        <p class="text-muted mb-0">by {{!!user.username ? user.username : "Anonymous"}}, {{review.postedAt | date: "dd MMM YYYY"}}</p>
+                    </div>
+                </ng-container>
                 <div *ngIf="(loggedIn$ | async ) && (currentId$ | async) == review.userId" class="pb-3">
                     <button class="btn btn-outline-primary mr" (click)="toggleEditMode()">Update</button>
                     <button class="btn btn-outline-danger mr" (click)="remove()">Delete</button>
@@ -29,8 +32,13 @@
     </ng-container>
 </ng-container>
 
+
 <ng-template #loading>
     <p>Loading...</p>
+</ng-template>
+
+<ng-template #justDate>
+    <p class="text-muted mb-0">{{review.postedAt | date: "dd MMM YYYY"}}</p>
 </ng-template>
 
 <ng-template #editMode>

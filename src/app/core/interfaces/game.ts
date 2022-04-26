@@ -7,4 +7,5 @@ export interface IGame {
     releaseDate: string;
     reviews: string[];
     average: number;
+    image: string;
 }

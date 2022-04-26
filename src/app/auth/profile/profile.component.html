@@ -1,12 +1,19 @@
 <div *ngIf="!!currentUser else loading" class="container">
     <div class="card card-body mb-3">
-        <div *ngIf="!editing else editMode" class="wrapper">
-            <div class="wrapper">
-                <img src='{{currentUser.avatar}}' class="avatar" alt="avatar">
-                <h3>{{currentUser.username}}</h3>
-            </div>
-            <button (click)="editProfileToggle()"  class="btn btn-outline-primary">Edit Profile</button>
-        </div>
+        <ng-container *ngIf="!editingProfile else editMode">
+            <ng-container *ngIf="!changingCredentials else credentialsMode">
+                <div class="wrapper">
+                    <div class="wrapper">
+                        <img src='{{currentUser.avatar}}' class="avatar" alt="avatar">
+                        <h3>{{currentUser.username}}</h3>
+                    </div>
+                    <div class="wrapper wrapper-column stretch">
+                        <button (click)="editProfileToggle()"  class="btn btn-outline-primary">Edit Profile</button>
+                        <button (click)="changeEmailorPasswordToggle()"  class="btn btn-outline-primary">Change Email/Password</button>
+                    </div>
+                </div>
+            </ng-container>
+        </ng-container>
     </div>
 
     <h2 class="card-title text-centered">My reviews</h2>
@@ -17,6 +24,7 @@
     </ng-container>
 </div>
 
+
 <ng-template #loading>
     <p>Loading...</p>
 </ng-template>
@@ -25,24 +33,68 @@
     <p>This user has not submitted any reviews yet.</p>
 </ng-template>
 
+
 <ng-template #editMode>
     <form [formGroup]="profileForm" (ngSubmit)="updateProfile$()">
         <fieldset>
             
             <label for="username"></label>
-            <input formControlName="username" class="form-control {{showError('username') ?  'is-invalid' : ''}}" type="text" name="username" id="username" placeholder="New name">
-            <ng-container *ngIf="showError('username')">
-                <p class="invalid-feedback" *ngIf="validation('username', 'required')">Username is required!</p>
-                <p class="invalid-feedback" *ngIf="validation('username', 'minlength') && !validation('username', 'required')">Username is too short!</p>
+            <input formControlName="username" class="form-control {{showError('username', profileForm) ?  'is-invalid' : ''}}" type="text" name="username" id="username" placeholder="New name">
+            <ng-container *ngIf="showError('username', profileForm)">
+                <p class="invalid-feedback" *ngIf="validation('username', profileForm, 'required')">Username is required!</p>
+                <p class="invalid-feedback" *ngIf="validation('username', profileForm, 'minlength') && !validation('username', profileForm, 'required')">Username is too short!</p>
             </ng-container>
 
 
             <label for="avatar"></label>
-            <input formControlName="avatar" class="form-control {{showError('avatar') ?  'is-invalid' : ''}}" type="text" name="avatar" id="avatar" placeholder="https://www.example.com/your/avatar">
+            <input formControlName="avatar" class="form-control {{showError('avatar', profileForm) ?  'is-invalid' : ''}}" type="text" name="avatar" id="avatar" placeholder="https://www.example.com/your/avatar">
 
 
             <button class="btn btn-outline-primary m-3" [disabled]="this.profileForm.invalid">Update</button>
             <button class="btn btn-outline-danger m-3" (click)="editProfileToggle()">Cancel</button>
+            
+        </fieldset>
+    </form>
+</ng-template>
+
+<ng-template #credentialsMode>
+    <form [formGroup]="userForm" (ngSubmit)="updateCredentials$()">
+        <fieldset class="p-3 wrapper wrapper-column">
+            <h3 class="m-3 mt-0">Change Email and/or Password</h3>
+
+            <div class="wrapper">
+                <div class="wide-250">
+                    <label for="email">Email</label>
+                    <input formControlName="email" class="form-control {{showError('email', userForm) ?  'is-invalid' : ''}}" type="email" name="email" id="email" placeholder="example@email.com">
+                    <ng-container *ngIf="showError('email', userForm)">
+                        <p class="invalid-feedback" *ngIf="validation('email', userForm, 'email')">Invalid email!</p>
+                    </ng-container>
+                </div>
+                
+
+                <div class="wide-250">
+                    <label for="newPassword">Password</label>
+                    <input formControlName="newPassword" class="form-control {{showError('newPassword', userForm) ?  'is-invalid' : ''}}" type="password" name="newPassword" id="newPassword" placeholder="**********">
+                    <ng-container *ngIf="showError('newPassword', userForm)">
+                        <p class="invalid-feedback" *ngIf="validation('newPassword', userForm, 'minlength')">Password is too short!</p>
+                    </ng-container>
+                </div>
+            </div>
+            <p class="text-muted font-italic mb-3"><small>You can fill out either of the fields, or both.</small></p>
+
+            <div class="wide">
+                <label for="oldPassword">Confirm old password</label>
+                <input formControlName="oldPassword" class="form-control {{showError('oldPassword', userForm) ?  'is-invalid' : ''}}" type="password" name="oldPassword" id="oldPassword" placeholder="**********">
+                <ng-container *ngIf="showError('oldPassword', userForm)">
+                    <p class="invalid-feedback" *ngIf="validation('oldPassword', userForm, 'minlength')">Password is too short!</p>
+                </ng-container>
+            </div>
+
+
+            <div class="mt-3">
+                <button class="btn btn-outline-primary m-2" [disabled]="this.profileForm.invalid">Update</button>
+                <button class="btn btn-outline-danger m-2" (click)="changeEmailorPasswordToggle()">Cancel</button>
+            </div>
             
         </fieldset>
     </form>

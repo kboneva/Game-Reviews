@@ -86,7 +86,7 @@ export class GamePageComponent implements OnInit {
   }
 
 
-  updateGame(gameForm: {title: string, description: string, developer: string, genre: string, releaseDate: string}) {
+  updateGame(gameForm: {title: string, description: string, developer: string, genre: string, releaseDate: string, image: string}) {
     this.gameService.updateGame$(this.gameId, gameForm)
     .then(() => {
       this.initialize();

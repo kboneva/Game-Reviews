@@ -19,6 +19,13 @@
     color: red;
 }
 
+.avatar {
+    width: 20px;
+    height: 20px;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
 .game-title {
     text-decoration: none;
     color: inherit
@@ -30,6 +37,11 @@
 
 .justify-content-end {
     justify-content: flex-end;
+}
+
+.justify-content-start {
+    justify-content: flex-start;
+    align-items: center;
 }
 
 input {

@@ -28,6 +28,7 @@ export class AllGamesPageComponent implements OnInit {
     }) 
   }
 
+  // TODO if time left: sorting/filtering
   sortByDate(games: IGame[]){
     return games.sort((a, b) => new Date(b.releaseDate).getTime() - new Date(a.releaseDate).getTime());
   }

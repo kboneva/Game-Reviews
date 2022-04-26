@@ -4,7 +4,7 @@ import { Database, ref, set } from '@angular/fire/database';
 import { Router } from '@angular/router';
 import { BehaviorSubject, map } from 'rxjs';
 import { processError, processSuccess } from './auth/utils';
-import { NotificationService, NotificationType } from './core/services/notification.service';
+import { NotificationService } from './core/services/notification.service';
 import { UserService } from './core/services/user.service';
 
 @Injectable({
@@ -102,16 +102,36 @@ export class AuthService {
   }
 
 
-  // TODO if time left: edit profile: change email and password(?)
-  changeEmail(email: string) {
-    this.currentUser$.subscribe(user => {
-      updateEmail(user, email);
-    })
-  }
-  
-  changePassword(password: string) {
-    this.currentUser$.subscribe(user => {
-      updatePassword(user, password);
+  // TODO if time left: fix reauthenticate before changing email/password
+  changeCredentials(newEmail: string, oldPassword: string, newPassword: string) {
+    const currentEmail = this.auth.currentUser?.email;
+    signOut(this.auth)
+    .then(() => {
+      signInWithEmailAndPassword(this.auth, currentEmail!, oldPassword)
+      .then(userCredentials => {
+
+        if (!!newEmail){
+          updateEmail(userCredentials.user, newEmail)
+          .catch(err => {
+            processError(err, this.notifService);
+          });
+        }
+        
+        if (!!newPassword){
+          updatePassword(userCredentials.user, newPassword)
+          .catch(err => {
+            processError(err, this.notifService);
+          });
+        }
+
+      })
+      .then(() => {
+        const whatToNotify = !!newEmail && !!newPassword ? "credentials!" : (!!newEmail ? "email!" : "password!");
+        processSuccess("Successfully updated your " + whatToNotify, this.notifService);
+      })
+      .catch(err => {
+        processError(err, this.notifService);
+      });
     })
   }
 }

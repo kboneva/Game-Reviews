@@ -1,12 +1,80 @@
-<h4 class="card-title">Highest rated games</h4>
-<div *ngIf="!!highest else loading">
-    <app-home-game *ngFor="let game of highest" [game]="game"></app-home-game>
+<div class="column" *ngIf="!!games else loading">
+    <div class="section-one">
+        <h4 class="center">Highest rated games</h4>
+        <hr>
+        <div *ngIf="!!highest else loading" class="wrapper">
+            <div *ngFor="let game of highest">
+                <div class="imageBox">
+                    <img src="{{game.image}}" alt="">
+                    <p class="positive">{{game.average | number:'0.0-0'}}</p>
+                    <a [routerLink]="['/games', game._id]" class="game-title">
+                        <p class="card-title">{{game.title}}</p>
+                    </a>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+    
+
+    <div class="combined">
+        <div class="column col-4">
+            <div class="section-two mb-3">
+                <h4 class="center">Most discussed games</h4>
+                <hr>
+                <div *ngIf="!!mostDiscussed else loading">
+                    <div *ngFor="let game of mostDiscussed">
+                        <div class="card card-body wrapper-left">
+                            <p class="{{game.average < 5 ? 'negative' : 'positive'}}">{{game.average | number:'0.0-0'}}</p>
+                            <a [routerLink]="['/games', game._id]" class="game-title">
+                                <p class="card-title">{{game.title}}</p>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    
+            <div class="section-three">
+                <h4 class="center">Lowest rated games</h4>
+                <hr>
+                <div *ngIf="!!lowest else loading">
+                    <div *ngFor="let game of lowest">
+                        <div class="card card-body wrapper-left">
+                            <p class="negative">{{game.average | number:'0.0-0'}}</p>
+                            <a [routerLink]="['/games', game._id]" class="game-title">
+                                <p class="card-title">{{game.title}}</p>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="section-four col-6">
+            <h4 class="center">Latest releases</h4>
+            <hr>
+            <div *ngIf="!!latest else loading">
+                <div *ngFor="let game of latest">
+                    <div class="card card-body wrapper">
+                        <div class="wrapper-left">
+                            <div class="smallImageBox">
+                                <img src="{{game.image}}" alt="">
+                            </div>
+                            <a [routerLink]="['/games', game._id]" class="game-title col-9">
+                                <h5 class="card-title">{{game.title}}</h5>
+                                <p class="text-muted"><small>{{game.releaseDate | date: "dd MMM YYYY"}}</small></p>
+                                <p><small>{{game.description.length > 120 ? (game.description | slice: 0:120) + "..." : game.description}}</small></p>
+                            </a>
+                        </div>
+                        <div><p class="negative">{{game.average | number:'0.0-0'}}</p></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
-<br>
-<h4 class="card-title">Most controversial games</h4>
-<div *ngIf="!!lowest else loading">
-    <app-home-game *ngFor="let game of lowest" [game]="game"></app-home-game>
-</div>
+
 
 <ng-template #loading>
     <p>Loading....</p>

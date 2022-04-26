@@ -12,7 +12,8 @@ import { UserService } from 'src/app/core/services/user.service';
 })
 export class ProfileComponent implements OnInit {
 
-  editing: boolean = false;
+  editingProfile: boolean = false;
+  changingCredentials: boolean = false;
   currentUser!: IUser;
 
   page = 0;
@@ -24,6 +25,12 @@ export class ProfileComponent implements OnInit {
   profileForm: FormGroup = this.formBuilder.group({
     "username": [null, { validators: [Validators.maxLength(50)], updateOn: 'change'}],
     "avatar": [null, {}]
+  })
+
+  userForm: FormGroup = this.formBuilder.group({
+    "email": [null, { validators: [Validators.email], updateOn: 'change'}],
+    "oldPassword": [null, { validators: [Validators.minLength(5), Validators.required], updateOn: 'change'}],
+    "newPassword": [null, { validators: [Validators.minLength(5)], updateOn: 'change'}]
   })
 
   constructor(private authService: AuthService, private userService: UserService, private formBuilder: FormBuilder, private reviewService: ReviewService) { }
@@ -44,14 +51,17 @@ export class ProfileComponent implements OnInit {
   }
 
   editProfileToggle() {
-    this.editing = !this.editing;
-    if (this.editing)
-    {
+    this.editingProfile = !this.editingProfile;
+    if (this.editingProfile) {
       this.profileForm.patchValue({
         "username": this.currentUser.username,
         "avatar": this.currentUser.avatar
       })
     }
+  }
+
+  changeEmailorPasswordToggle() {
+    this.changingCredentials = !this.changingCredentials;
   }
 
   async updateProfile$(): Promise<void>{
@@ -60,8 +70,25 @@ export class ProfileComponent implements OnInit {
     await this.userService.updateProfile$(this.currentUser._id, username, avatar)
     .then(() => {
       this.authService.editProfile(username, avatar)
-      this.editing = false;
+      this.editingProfile = false;
       this.ngOnInit();
+    })
+  }
+
+  async updateCredentials$(): Promise<void> {
+    const email = this.userForm.value.email;
+    const oldPassword = this.userForm.value.oldPassword;
+    const newPassword = this.userForm.value.newPassword;
+    if (!email && !newPassword) {
+      console.log('returning')
+      return;
+    }
+    this.authService.changeCredentials(email, oldPassword, newPassword);
+    this.changeEmailorPasswordToggle();
+    this.userForm.patchValue({
+      email: "",
+      oldPassword: "",
+      newPassword: ""
     })
   }
 
@@ -72,11 +99,11 @@ export class ProfileComponent implements OnInit {
     })
   }
   
-  showError(property: string): boolean {
-    return this.profileForm.controls[property].invalid && this.profileForm.controls[property].touched;
+  showError(property: string, form: FormGroup): boolean {
+    return form.controls[property].invalid && form.controls[property].touched;
   }
 
-  validation(property: string, validator: string): boolean {
-    return this.profileForm.controls[property].errors?.[validator];
+  validation(property: string, form: FormGroup, validator: string): boolean {
+    return form.controls[property].errors?.[validator];
   }
 }

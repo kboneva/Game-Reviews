@@ -16,6 +16,7 @@ export class AddGamePageComponent implements OnInit {
     "developer": [null, { validators: [Validators.required], updateOn: 'change'}],
     "genre": [null, { validators: [Validators.required, Validators.pattern(/[a-zA-Z0-9- ]+(, [a-zA-Z0-9- ]+)*/)], updateOn: 'change'}],
     "releaseDate": [null, { validators: [Validators.required, Validators.pattern(/\d{4}-\d{2}-\d{2}/)], updateOn: 'change'}],
+    "image": [null, {validators: [Validators.required], updateOn: 'change'}]
   })
 
   constructor(private gameService: GameService, private formBuilder: FormBuilder, private router: Router) { }

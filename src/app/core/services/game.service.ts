@@ -21,17 +21,6 @@ export class GameService {
     return this.http.get<IGame>(`${environment.firebase.databaseURL}/games/${_id}.json`);
   }
 
-  loadTopThree$(highest: boolean): Observable<IGame[]> {
-    return this.http.get<IGame[]>(`${environment.firebase.databaseURL}/games.json`)
-    .pipe(
-      map(games => Object.values(games)
-      .filter(g => g.average > 0)
-      .filter(g => highest ? g.average >= 5 : g.average < 5)
-      .sort((g1: IGame, g2: IGame) => highest ? (g2.average - g1.average) : (g1.average - g2.average))
-      .slice(0, 3))
-    )
-  }
-
   async gameListener(_id: string) {
     onValue(query(ref(this.db, 'reviews'), orderByChild('gameId'), equalTo(_id)), async (snapshot) => {
       const data = snapshot.val();
@@ -50,7 +39,7 @@ export class GameService {
     });
   }
 
-  async addGame$(data: {title: string, description: string, developer: string, genre: string, releaseDate: string}){
+  async addGame$(data: {title: string, description: string, developer: string, genre: string, releaseDate: string, image: string}){
     const gameId = push(child(ref(this.db), 'games')).key;
 
     const game = {
@@ -60,6 +49,7 @@ export class GameService {
       developer: data.developer,
       genre: data.genre.split(", "),
       releaseDate: data.releaseDate,
+      image: data.image,
       average: 0
     }
 
@@ -72,13 +62,14 @@ export class GameService {
     });
   }
 
-  async updateGame$(gameId: string, data: {title: string, description: string, developer: string, genre: string, releaseDate: string}) {
+  async updateGame$(gameId: string, data: {title: string, description: string, developer: string, genre: string, releaseDate: string, image: string}) {
     const game = {
       title: data.title,
       description: data.description,
       developer: data.developer,
       genre: data.genre.split(",").map(g => g.trim()),
-      releaseDate: data.releaseDate
+      releaseDate: data.releaseDate,
+      image: data.image
     }
 
     await update(ref(this.db, 'games/' + gameId), game)

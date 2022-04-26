@@ -1,7 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { IGame } from 'src/app/core/interfaces';
-import { GameService } from 'src/app/core/services/game.service';
 
 @Component({
   selector: 'app-game',
@@ -25,9 +24,10 @@ export class GameComponent implements OnInit {
     "developer": [null, { validators: [Validators.required], updateOn: 'change'}],
     "genre": [null, { validators: [Validators.required, Validators.pattern(/[a-zA-Z0-9- ]+(, [a-zA-Z0-9- ]+)*/)], updateOn: 'change'}],
     "releaseDate": [null, { validators: [Validators.required, Validators.pattern(/\d{4}-\d{2}-\d{2}/)], updateOn: 'change'}],
+    "image": [null, {validators: [Validators.required], updateOn: 'change'}]
   })
 
-  constructor(private gameService: GameService, private formBuilder: FormBuilder) { }
+  constructor(private formBuilder: FormBuilder) { }
 
   ngOnInit(): void {
   }
@@ -42,7 +42,8 @@ export class GameComponent implements OnInit {
         "description": this.game.description,
         "developer": this.game.developer,
         "genre": this.game.genre,
-        "releaseDate": this.game.releaseDate
+        "releaseDate": this.game.releaseDate,
+        "image": this.game.image
       })
     }
   }

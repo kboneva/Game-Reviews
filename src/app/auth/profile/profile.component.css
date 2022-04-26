@@ -18,6 +18,24 @@
     align-items: center;
 }
 
+.wrapper-column {
+    flex-direction: column;
+    text-align: center;
+    gap: 0.5rem;
+}
+
+.stretch {
+    align-items: stretch;
+}
+
+.wide {
+    width: 80%;
+}
+
+.wide-250 {
+    width: 250px;
+}
+
 .avatar {
     margin: 10px;
     width: 100px;

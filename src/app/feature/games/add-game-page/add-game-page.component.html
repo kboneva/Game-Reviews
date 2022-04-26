@@ -41,6 +41,13 @@
                 <p class="invalid-feedback" *ngIf="validation('developer', 'pattern')">Invalid input!</p>
             </ng-container>
 
+            
+            <label for="image"></label>
+            <input formControlName="image" class="form-control {{showError('image') ?  'is-invalid' : ''}}" type="text" name="image" id="image" placeholder="http://www.example.com/image-url">
+            <ng-container *ngIf="showError('image')">
+                <p class="invalid-feedback" *ngIf="validation('image', 'required')">Field is required!</p>
+            </ng-container>
+
 
             <button class="btn btn-success m-3" [disabled]="this.gameForm.invalid">Add Game</button>
 
