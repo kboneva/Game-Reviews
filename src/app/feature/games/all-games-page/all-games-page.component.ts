@@ -16,7 +16,7 @@ export class AllGamesPageComponent implements OnInit {
   gamesList!: IGame[];
   
   page = 0;
-  pageSize = 4;
+  pageSize = 5;
   collectionSize!: number;
 
   dropDownForm = new FormControl('');

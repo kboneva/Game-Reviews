@@ -63,6 +63,7 @@ export class GameService {
   }
 
   async updateGame$(gameId: string, data: {title: string, description: string, developer: string, genre: string, releaseDate: string, image: string}) {
+    console.log(data)
     const game = {
       title: data.title,
       description: data.description,

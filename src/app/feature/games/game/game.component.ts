@@ -41,7 +41,7 @@ export class GameComponent implements OnInit {
         "title": this.game.title,
         "description": this.game.description,
         "developer": this.game.developer,
-        "genre": this.game.genre,
+        "genre": this.game.genre.toString(),
         "releaseDate": this.game.releaseDate,
         "image": this.game.image
       })

@@ -17,7 +17,7 @@ export class ProfileComponent implements OnInit {
   currentUser!: IUser;
 
   page = 0;
-  pageSize = 3;
+  pageSize = 4;
   collectionSize!: number;
 
   defaultAvatar = '/assets/avatar.jpg';
